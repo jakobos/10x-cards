@@ -1,28 +1,36 @@
 # Dokument wymagań produktu (PRD) - Generator Fiszek AI
+
 ## 1. Przegląd produktu
+
 Generator Fiszek AI to aplikacja webowa, która ma na celu usprawnienie procesu tworzenia fiszek edukacyjnych. Głównym założeniem jest wykorzystanie sztucznej inteligencji do automatycznego generowania fiszek na podstawie tekstu dostarczonego przez użytkownika. Produkt jest skierowany do senior deweloperów, którzy uczą się nowych technologii i potrzebują szybkiego sposobu na tworzenie materiałów do nauki w oparciu o metodę powtórek. Aplikacja pozwoli na ręczne tworzenie i edycję fiszek, grupowanie ich w talie oraz naukę przy użyciu gotowego algorytmu powtórek.
 
 ## 2. Problem użytkownika
+
 Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten jest bardzo czasochłonny. Senior deweloperzy, którzy chcą szybko przyswajać nową wiedzę, np. z dokumentacji technicznych, nie mają czasu na ręczne przepisywanie i formatowanie dziesiątek kart. Ta bariera często zniechęca ich do regularnego stosowania jednej z najbardziej efektywnych technik zapamiętywania, jaką jest spaced repetition. Generator Fiszek AI rozwiązuje ten problem, automatyzując najbardziej żmudną część procesu i pozwalając użytkownikowi skupić się na nauce.
 
 ## 3. Wymagania funkcjonalne
+
 ### 3.1. Zarządzanie kontem użytkownika
+
 - Użytkownicy mogą trwale usunąć swoje konto wraz ze wszystkimi danymi.
 - Użytkownicy mogą zmienić swoje hasło.
 
 ### 3.2. Zarządzanie taliami (Deck)
+
 - Użytkownicy mogą tworzyć nowe talie, podając ich nazwę.
 - Użytkownicy mogą edytować nazwy istniejących talii.
 - Użytkownicy mogą usuwać talie, co powoduje skasowanie również wszystkich zawartych w nich fiszek.
 - Usunięcie talii wymaga dodatkowego potwierdzenia.
 
 ### 3.3. Zarządzanie fiszkami (Flashcard)
+
 - Każda fiszka składa się z przodu (maks. 200 znaków) i tyłu (maks. 500 znaków).
 - Użytkownicy mogą ręcznie tworzyć nowe fiszki wewnątrz talii.
 - Użytkownicy mogą edytować przód i tył istniejących fiszek.
 - Użytkownicy mogą usuwać pojedyncze fiszki.
 
 ### 3.4. Generowanie fiszek przez AI
+
 - Użytkownik może wkleić tekst (plain text) o długości od 1000 do 10000 znaków w celu wygenerowania fiszek.
 - System analizuje tekst i prezentuje użytkownikowi listę propozycji (kandydatów) na fiszki.
 - Użytkownik może zaakceptować lub odrzucić każdą z propozycji.
@@ -30,13 +38,16 @@ Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten
 - Nie ma możliwości edycji fiszek na etapie przeglądania propozycji.
 
 ### 3.5. System nauki
+
 - Aplikacja wykorzystuje gotową bibliotekę open-source do implementacji algorytmu powtórek
 - Interfejs nauki pokazuje przód fiszki, a użytkownik odkrywa jej tył.
 - Po odkryciu tyłu, użytkownik dokonuje samooceny, wybierając opcję "Wiedziałem" lub "Nie wiedziałem".
 - Na podstawie oceny algorytm decyduje, kiedy fiszka powinna pojawić się ponownie.
 
 ## 4. Granice produktu
+
 ### 4.1. Co wchodzi w zakres MVP
+
 - Rejestracja i logowanie
 - Pełne zarządzanie (CRUD) taliami i fiszkami.
 - Generowanie fiszek przez AI z wklejonego tekstu w formacie plain text.
@@ -44,6 +55,7 @@ Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten
 - Aplikacja działa wyłącznie w przeglądarce internetowej (web).
 
 ### 4.2. Co nie wchodzi w zakres MVP
+
 - Własny, zaawansowany algorytm powtórek (np. na wzór SuperMemo czy Anki).
 - Import plików z materiałami (np. PDF, DOCX, TXT).
 - Funkcje społecznościowe, takie jak współdzielenie talii między użytkownikami.
@@ -52,7 +64,9 @@ Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten
 - Monetyzacja i systemy płatności.
 
 ## 5. Historyjki użytkowników
+
 ### 5.1. Zarządzanie kontem
+
 - ID: US-001
 - Tytuł: Rejestracja użytkownika
 - Opis: Jako nowy użytkownik, chcę móc założyć konto w aplikacji, abym mógł przechowywać swoje talie i fiszki.
@@ -85,6 +99,7 @@ Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten
   4. Jestem wylogowywany i przenoszony na stronę główną.
 
 ### 5.2. Zarządzanie taliami
+
 - ID: US-005
 - Tytuł: Tworzenie talii
 - Opis: Jako użytkownik, chcę móc tworzyć nowe talie, aby grupować tematycznie moje fiszki.
@@ -119,6 +134,7 @@ Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten
   3. Po potwierdzeniu, talia znika z listy "Moje talie".
 
 ### 5.3. Zarządzanie fiszkami
+
 - ID: US-009
 - Tytuł: Ręczne dodawanie fiszki
 - Opis: Jako użytkownik, chcę móc ręcznie dodać nową fiszkę do wybranej talii.
@@ -146,6 +162,7 @@ Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten
   2. Po kliknięciu "Usuń" i potwierdzeniu, fiszka jest trwale usuwana z talii.
 
 ### 5.4. Generowanie fiszek AI
+
 - ID: US-012
 - Tytuł: Rozpoczęcie generowania fiszek AI
 - Opis: Jako użytkownik, chcę wkleić fragment tekstu, aby AI wygenerowało dla mnie propozycje fiszek.
@@ -167,6 +184,7 @@ Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten
   6. Po zakończeniu jestem przenoszony z powrotem do widoku talii, gdzie widzę nowo dodane fiszki.
 
 ### 5.5. Nauka
+
 - ID: US-014
 - Tytuł: Rozpoczęcie sesji nauki
 - Opis: Jako użytkownik, chcę rozpocząć sesję nauki dla wybranej talii.
@@ -192,10 +210,13 @@ Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten
   2. Jestem przenoszony z powrotem do widoku "Moje talie".
 
 ## 6. Metryki sukcesu
+
 ### Metryka 1: Jakość generowanych fiszek
+
 - Cel: Minimum 75% fiszek wygenerowanych przez AI jest akceptowanych przez użytkownika.
-- Sposób mierzenia: System będzie logował każdą akcję "akceptuj" i "odrzuć" na ekranie przeglądania propozycji. Metryka będzie liczona jako: (liczba zaakceptowanych fiszek / łączna liczba wygenerowanych propozycji) * 100.
+- Sposób mierzenia: System będzie logował każdą akcję "akceptuj" i "odrzuć" na ekranie przeglądania propozycji. Metryka będzie liczona jako: (liczba zaakceptowanych fiszek / łączna liczba wygenerowanych propozycji) \* 100.
 
 ### Metryka 2: Adopcja funkcji AI
+
 - Cel: Minimum 75% wszystkich fiszek w systemie jest tworzonych przy użyciu generatora AI.
-- Sposób mierzenia: Każda fiszka w bazie danych będzie miała atrybut wskazujący na metodę jej utworzenia ("AI" lub "manualna"). Metryka będzie liczona jako: (liczba fiszek stworzonych przez AI / całkowita liczba fiszek w systemie) * 100.
+- Sposób mierzenia: Każda fiszka w bazie danych będzie miała atrybut wskazujący na metodę jej utworzenia ("AI" lub "manualna"). Metryka będzie liczona jako: (liczba fiszek stworzonych przez AI / całkowita liczba fiszek w systemie) \* 100.
