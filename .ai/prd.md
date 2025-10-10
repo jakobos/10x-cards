@@ -33,9 +33,8 @@ Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten
 
 - Użytkownik może wkleić tekst (plain text) o długości od 1000 do 10000 znaków w celu wygenerowania fiszek.
 - System analizuje tekst i prezentuje użytkownikowi listę propozycji (kandydatów) na fiszki.
-- Użytkownik może zaakceptować lub odrzucić każdą z propozycji.
+- Użytkownik może zaakceptować, edytować lub odrzucić każdą z propozycji.
 - Zaakceptowane fiszki są dodawane do wybranej talii.
-- Nie ma możliwości edycji fiszek na etapie przeglądania propozycji.
 
 ### 3.5. System nauki
 
@@ -177,11 +176,12 @@ Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten
 - Opis: Jako użytkownik, chcę przejrzeć listę fiszek zaproponowanych przez AI i zdecydować, które z nich chcę dodać do mojej talii.
 - Kryteria akceptacji:
   1. Po zakończeniu generowania, widzę listę "kandydatów" na fiszki, każdy z widocznym przodem i tyłem.
-  2. Przy każdej propozycji znajdują się przyciski "Akceptuj" i "Odrzuć".
+  2. Przy każdej propozycji znajdują się przyciski "Akceptuj", "Odrzuć" i "Edytuj".
   3. Kliknięcie "Akceptuj" powoduje oznaczenie fiszki do dodania.
   4. Kliknięcie "Odrzuć" powoduje usunięcie propozycji z listy.
-  5. Po przejrzeniu wszystkich propozycji klikam przycisk "Zakończ". Zaakceptowane fiszki są dodawane do talii.
-  6. Po zakończeniu jestem przenoszony z powrotem do widoku talii, gdzie widzę nowo dodane fiszki.
+  5. Kliknięcie "Edytuj" powoduje otwarcie modalu z polem "Przód" i "Tył" do edycji.
+  6. Po przejrzeniu wszystkich propozycji klikam przycisk "Zakończ". Zaakceptowane fiszki są dodawane do talii.
+  7. Po zakończeniu jestem przenoszony z powrotem do widoku talii, gdzie widzę nowo dodane fiszki.
 
 ### 5.5. Nauka
 
