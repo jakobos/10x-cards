@@ -89,10 +89,17 @@ export const aiRateLimiter = new RateLimiter({
   windowMs: 10 * 60 * 1000, // 10 minutes
 });
 
+// Create rate limiter for CRUD endpoints: 100 requests per minute
+export const crudRateLimiter = new RateLimiter({
+  maxRequests: 100,
+  windowMs: 60 * 1000, // 1 minute
+});
+
 // Cleanup every 15 minutes
 setInterval(
   () => {
     aiRateLimiter.cleanup();
+    crudRateLimiter.cleanup();
   },
   15 * 60 * 1000
 );
