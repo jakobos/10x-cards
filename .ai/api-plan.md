@@ -247,7 +247,7 @@ All endpoints are prefixed with `/api`.
 
 - **Method**: `POST`
 - **Path**: `/ai/generate-flashcards`
-- **Description**: Submits source text to an AI model to generate flashcard suggestions. It also creates a `generation` entry in the `generations` table. This endpoint is stateless and does not persist any data.
+- **Description**: Submits source text to an AI model to generate flashcard suggestions. It creates a `generation` entry in the `generations` table to track the generation process and returns the candidates along with a `generationId`.
 - **Request Body**:
   ```json
   {
@@ -259,6 +259,7 @@ All endpoints are prefixed with `/api`.
   - **Content**:
     ```json
     {
+      "generationId": "new-generation-uuid",
       "candidates": [
         {
           "front": "AI Generated Question 1",
@@ -283,10 +284,11 @@ All endpoints are prefixed with `/api`.
 
 - **Method**: `POST`
 - **Path**: `/decks/{deckId}/flashcards/batch`
-- **Description**: Creates multiple flashcards in a specified deck from a list of accepted AI candidates. Also creates a `generations` log entry to track metrics.
+- **Description**: Creates multiple flashcards in a specified deck from a list of AI-generated candidates. It links them to an existing generation session via `generationId` and updates the metrics for that session.
 - **Request Body**:
   ```json
   {
+    "generationId": "existing-generation-uuid",
     "flashcards": [
       {
         "front": "AI Generated Question 1",
@@ -298,16 +300,7 @@ All endpoints are prefixed with `/api`.
         "back": "User Edited Answer 2",
         "source": "ai-edited"
       }
-    ],
-    "generationMeta": {
-      "model": "claude-3.5-sonnet-20240620",
-      "generatedCount": 10,
-      "acceptedUneditedCount": 1,
-      "acceptedEditedCount": 1,
-      "sourceTextHash": "sha256-hash-of-the-source-text",
-      "sourceTextLength": 5432,
-      "generationDuration": 4500
-    }
+    ]
   }
   ```
 - **Success Response**:
@@ -316,13 +309,13 @@ All endpoints are prefixed with `/api`.
     ```json
     {
       "createdCount": 2,
-      "generationId": "generation-log-uuid"
+      "generationId": "existing-generation-uuid"
     }
     ```
 - **Error Responses**:
   - `400 Bad Request`: If request body is malformed or validation for any flashcard fails.
   - `401 Unauthorized`: If the user is not authenticated.
-  - `404 Not Found`: If the specified `deckId` does not exist or belong to the user.
+  - `404 Not Found`: If the specified `deckId` or `generationId` does not exist or belong to the user.
 
 
 
@@ -338,5 +331,5 @@ All endpoints are prefixed with `/api`.
   - `sourceText`: Required, string, length between 1000 and 10000 characters.
 - **Business Logic**:
   - **Cascading Deletes**: Deleting a deck (`DELETE /decks/{deckId}`) will automatically delete all associated flashcards, as defined by the `ON DELETE CASCADE` foreign key constraint in the database.
-  - **Metrics Logging**: The `POST /decks/{deckId}/flashcards/batch` endpoint is responsible for creating a log entry in the `generations` table to track the effectiveness of the AI generation feature, as required by the PRD.
+  - **Metrics Logging**: The `POST /ai/generate-flashcards` endpoint creates a `generations` log entry. The `POST /decks/{deckId}/flashcards/batch` endpoint updates this entry with the final count of accepted and edited flashcards. This allows tracking the entire lifecycle of an AI generation task.
   - **Rate Limiting**: The computationally expensive `POST /ai/generate-flashcards` endpoint should be rate-limited to prevent abuse and control costs. A limit of 10 requests per minute per user is recommended as a starting point.
