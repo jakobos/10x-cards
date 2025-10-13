@@ -12,6 +12,7 @@ const generateFlashcardsSchema = z.object({
     .string()
     .min(1000, "Source text must be at least 1000 characters")
     .max(10000, "Source text must not exceed 10000 characters"),
+  deckId: z.string().uuid("Invalid deck ID format"),
 }) satisfies z.ZodType<GenerateFlashcardsCommand>;
 
 export const prerender = false;
@@ -60,10 +61,10 @@ export const POST: APIRoute = async (context) => {
       );
     }
 
-    const { sourceText } = validationResult.data;
+    const { sourceText, deckId } = validationResult.data;
 
     // 3. Call AI service to generate flashcard candidates
-    const result = await generateCandidates(sourceText, DEFAULT_USER_ID, context.locals.supabase);
+    const result = await generateCandidates(sourceText, deckId, DEFAULT_USER_ID, context.locals.supabase);
 
     // 4. Return response
     const response: GenerateFlashcardsResponseDto = {

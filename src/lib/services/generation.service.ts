@@ -16,12 +16,14 @@ export interface GenerateCandidatesResult {
  * Records the generation in the database for metrics tracking.
  *
  * @param sourceText - The text to generate flashcards from
+ * @param deckId - The ID of the deck to associate the generation with
  * @param userId - The ID of the authenticated user
  * @param supabase - Supabase client instance
  * @returns Generation ID and list of flashcard candidates
  */
 export async function generateCandidates(
   sourceText: string,
+  deckId: string,
   userId: string,
   supabase: SupabaseClient
 ): Promise<GenerateCandidatesResult> {
@@ -44,6 +46,7 @@ export async function generateCandidates(
       .from("generations")
       .insert({
         user_id: userId,
+        deck_id: deckId,
         model: "mock-model", // TODO: Replace with actual model name
         generated_count: candidates.length,
         source_text_hash: sourceTextHash,

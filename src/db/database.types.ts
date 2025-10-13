@@ -97,6 +97,7 @@ export interface Database {
           accepted_edited_count: number | null;
           accepted_unedited_count: number | null;
           created_at: string;
+          deck_id: string;
           generated_count: number;
           generation_duration: number | null;
           id: string;
@@ -110,6 +111,7 @@ export interface Database {
           accepted_edited_count?: number | null;
           accepted_unedited_count?: number | null;
           created_at?: string;
+          deck_id: string;
           generated_count: number;
           generation_duration?: number | null;
           id?: string;
@@ -123,6 +125,7 @@ export interface Database {
           accepted_edited_count?: number | null;
           accepted_unedited_count?: number | null;
           created_at?: string;
+          deck_id?: string;
           generated_count?: number;
           generation_duration?: number | null;
           id?: string;
@@ -132,7 +135,15 @@ export interface Database {
           updated_at?: string;
           user_id?: string;
         };
-        Relationships: [];
+        Relationships: [
+          {
+            foreignKeyName: "generations_deck_id_fkey";
+            columns: ["deck_id"];
+            isOneToOne: false;
+            referencedRelation: "decks";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       profiles: {
         Row: {

@@ -247,11 +247,12 @@ All endpoints are prefixed with `/api`.
 
 - **Method**: `POST`
 - **Path**: `/ai/generate-flashcards`
-- **Description**: Submits source text to an AI model to generate flashcard suggestions. It creates a `generation` entry in the `generations` table to track the generation process and returns the candidates along with a `generationId`.
+- **Description**: Submits source text to an AI model to generate flashcard suggestions for a specific deck. It creates a `generation` entry in the `generations` table to track the process.
 - **Request Body**:
   ```json
   {
-    "sourceText": "A long string of text between 1000 and 10000 characters..."
+    "sourceText": "A long string of text between 1000 and 10000 characters...",
+    "deckId": "uuid-string-for-deck"
   }
   ```
 - **Success Response**:
@@ -273,9 +274,10 @@ All endpoints are prefixed with `/api`.
     }
     ```
 - **Error Responses**:
-  - `400 Bad Request`: If `sourceText` is missing or does not meet the length requirements.
+  - `400 Bad Request`: If `sourceText` or `deckId` are missing or `sourceText` does not meet the length requirements.
   - `401 Unauthorized`: If the user is not authenticated.
-  - `429 Too Many Requests`: If the user exceeds the rate limit for this endpoint.
+  - `404 Not Found`: If the provided `deckId` does not exist or is not accessible to the user.
+  - `429 Too many Requests`: If the user exceeds the rate limit for this endpoint.
   - `500 Internal Server Error`: If the AI service fails.
 
 ---

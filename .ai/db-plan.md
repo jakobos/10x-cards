@@ -32,6 +32,7 @@ Logs metadata for each AI flashcard generation operation to collect metrics.
 | :--- | :--- | :--- |
 | `id` | `UUID` | `PRIMARY KEY`, `DEFAULT gen_random_uuid()` |
 | `user_id` | `UUID` | `NOT NULL`, `REFERENCES auth.users(id) ON DELETE CASCADE` |
+| `deck_id` | `UUID` | `NOT NULL`, `REFERENCES decks(id) ON DELETE CASCADE` |
 | `model` | `TEXT` | `NULL` |
 | `generated_count` | `INTEGER` | `NOT NULL` |
 | `accepted_unedited_count` | `INTEGER` | `NULLABLE` |
@@ -84,6 +85,7 @@ CREATE INDEX idx_decks_user_id ON decks(user_id);
 
 -- Indexes for the generations table
 CREATE INDEX idx_generations_user_id ON generations(user_id);
+CREATE INDEX idx_generations_deck_id ON generations(deck_id);
 
 -- Indexes for the flashcards table
 CREATE INDEX idx_flashcards_deck_id ON flashcards(deck_id);

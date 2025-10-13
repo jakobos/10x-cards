@@ -165,9 +165,11 @@ export interface BatchCreateFlashcardsResponseDto {
 // #region AI Generation Command Models
 /**
  * Command model for generating flashcards from source text.
+ * Requires both the text and the ID of the deck to which the cards will be added.
  */
 export interface GenerateFlashcardsCommand {
   sourceText: string;
+  deckId: Deck["id"];
 }
 
 /**
