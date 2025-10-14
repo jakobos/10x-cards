@@ -180,3 +180,25 @@ export interface BatchCreateFlashcardsCommand {
   flashcards: BatchFlashcardItemDto[];
 }
 // #endregion
+
+// #region AI Generation View Models
+/**
+ * Represents the status of a flashcard candidate in the UI.
+ */
+export type CandidateStatus = "pending" | "accepted" | "rejected";
+
+/**
+ * View model for a flashcard candidate with UI-specific properties.
+ * Extends FlashcardCandidateDto with client-side tracking fields.
+ */
+export interface FlashcardCandidateViewModel extends FlashcardCandidateDto {
+  id: string; // Unique client-side identifier (e.g., uuid v4)
+  status: CandidateStatus; // Current status of the candidate
+  isEdited: boolean; // Flag indicating if the candidate was modified by the user
+}
+
+/**
+ * Represents the different steps in the flashcard generation process.
+ */
+export type GenerationStep = "input" | "loading" | "review" | "submitting" | "error";
+// #endregion

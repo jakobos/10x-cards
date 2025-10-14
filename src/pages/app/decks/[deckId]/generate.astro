@@ -1,0 +1,34 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { GenerationClientComponent } from "@/components/generation/GenerationClientComponent";
+import { DEFAULT_USER_ID } from "@/db/supabase.client";
+
+export const prerender = false;
+
+const { deckId } = Astro.params;
+
+// Basic validation - deckId should be present and be a valid UUID format
+if (!deckId || typeof deckId !== "string") {
+  return Astro.redirect("/app/decks");
+}
+
+const supabase = Astro.locals.supabase;
+
+// Check if deck exists and belongs to user (using DEFAULT_USER_ID for development)
+const { data: deck, error: deckError } = await supabase
+  .from("decks")
+  .select("id, name")
+  .eq("id", deckId)
+  .eq("user_id", DEFAULT_USER_ID)
+  .single();
+
+if (deckError || !deck) {
+  return Astro.redirect("/app/decks");
+}
+
+const pageTitle = `Generuj fiszki AI - ${deck.name}`;
+---
+
+<Layout title={pageTitle}>
+  <GenerationClientComponent client:load deckId={deckId} />
+</Layout>
