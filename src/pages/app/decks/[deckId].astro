@@ -1,0 +1,61 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { DeckDetailsView } from "@/components/deck/DeckDetailsView";
+import { DEFAULT_USER_ID } from "@/db/supabase.client";
+import type { DeckDetailsDto } from "@/types";
+
+export const prerender = false;
+
+const { deckId } = Astro.params;
+
+// Basic validation - deckId should be present and be a valid UUID format
+if (!deckId || typeof deckId !== "string") {
+  return Astro.redirect("/app/decks");
+}
+
+const supabase = Astro.locals.supabase;
+
+// Fetch deck details with flashcards
+const { data: deck, error: deckError } = await supabase
+  .from("decks")
+  .select("id, name, created_at")
+  .eq("id", deckId)
+  .eq("user_id", DEFAULT_USER_ID)
+  .single();
+
+if (deckError || !deck) {
+  // Deck not found or doesn't belong to user - redirect to decks list
+  return Astro.redirect("/app/decks");
+}
+
+// Fetch flashcards for this deck
+const { data: flashcards, error: flashcardsError } = await supabase
+  .from("flashcards")
+  .select("id, front, back, source, created_at")
+  .eq("deck_id", deckId)
+  .order("created_at", { ascending: false });
+
+if (flashcardsError) {
+  return Astro.redirect("/app/decks");
+}
+
+// Transform data to match DeckDetailsDto
+const initialData: DeckDetailsDto = {
+  id: deck.id,
+  name: deck.name,
+  createdAt: deck.created_at,
+  flashcards: (flashcards || []).map((fc) => ({
+    id: fc.id,
+    front: fc.front,
+    back: fc.back,
+    source: fc.source,
+    createdAt: fc.created_at,
+  })),
+};
+
+const pageTitle = `${deck.name} - Szczegóły talii`;
+---
+
+<Layout title={pageTitle}>
+  <DeckDetailsView client:load initialData={initialData} />
+</Layout>

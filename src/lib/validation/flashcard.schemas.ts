@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { MAX_FLASHCARD_FRONT_LENGTH, MAX_FLASHCARD_BACK_LENGTH } from "@/lib/constants";
 
 /**
  * Schema for validating flashcard ID parameter
@@ -15,12 +16,12 @@ export const createFlashcardSchema = z.object({
     .string()
     .trim()
     .min(1, { message: "Front cannot be empty." })
-    .max(200, { message: "Front cannot exceed 200 characters." }),
+    .max(MAX_FLASHCARD_FRONT_LENGTH, { message: `Front cannot exceed ${MAX_FLASHCARD_FRONT_LENGTH} characters.` }),
   back: z
     .string()
     .trim()
     .min(1, { message: "Back cannot be empty." })
-    .max(500, { message: "Back cannot exceed 500 characters." }),
+    .max(MAX_FLASHCARD_BACK_LENGTH, { message: `Back cannot exceed ${MAX_FLASHCARD_BACK_LENGTH} characters.` }),
   source: z.enum(["manual", "ai-full", "ai-edited"], {
     errorMap: () => ({ message: "Source must be 'manual', 'ai-full', or 'ai-edited'." }),
   }),
@@ -36,13 +37,13 @@ export const updateFlashcardSchema = z
       .string()
       .trim()
       .min(1, { message: "Front cannot be empty." })
-      .max(200, { message: "Front cannot exceed 200 characters." })
+      .max(MAX_FLASHCARD_FRONT_LENGTH, { message: `Front cannot exceed ${MAX_FLASHCARD_FRONT_LENGTH} characters.` })
       .optional(),
     back: z
       .string()
       .trim()
       .min(1, { message: "Back cannot be empty." })
-      .max(500, { message: "Back cannot exceed 500 characters." })
+      .max(MAX_FLASHCARD_BACK_LENGTH, { message: `Back cannot exceed ${MAX_FLASHCARD_BACK_LENGTH} characters.` })
       .optional(),
   })
   .refine((data) => data.front !== undefined || data.back !== undefined, {

@@ -3,6 +3,7 @@ import { z } from "zod";
 
 import { DEFAULT_USER_ID } from "../../../../../db/supabase.client.ts";
 import { createFromAIGeneration } from "../../../../../lib/services/flashcard.service.ts";
+import { MAX_FLASHCARD_FRONT_LENGTH, MAX_FLASHCARD_BACK_LENGTH } from "../../../../../lib/constants.ts";
 import type {
   BatchCreateFlashcardsCommand,
   BatchCreateFlashcardsResponseDto,
@@ -17,11 +18,11 @@ const batchFlashcardItemSchema = z.object({
   front: z
     .string()
     .min(1, "Front text must be at least 1 character")
-    .max(200, "Front text must not exceed 200 characters"),
+    .max(MAX_FLASHCARD_FRONT_LENGTH, `Front text must not exceed ${MAX_FLASHCARD_FRONT_LENGTH} characters`),
   back: z
     .string()
     .min(1, "Back text must be at least 1 character")
-    .max(500, "Back text must not exceed 500 characters"),
+    .max(MAX_FLASHCARD_BACK_LENGTH, `Back text must not exceed ${MAX_FLASHCARD_BACK_LENGTH} characters`),
   source: z.enum(["ai-full", "ai-edited"], {
     errorMap: () => ({ message: "Source must be either 'ai-full' or 'ai-edited'" }),
   }),
