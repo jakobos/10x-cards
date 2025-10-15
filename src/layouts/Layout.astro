@@ -1,5 +1,7 @@
 ---
 import "../styles/global.css";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 interface Props {
   title?: string;
@@ -18,7 +20,10 @@ const { title = "10x Astro Starter" } = Astro.props;
     <title>{title}</title>
   </head>
   <body>
-    <slot />
+    <TooltipProvider client:load>
+      <slot />
+    </TooltipProvider>
+    <Toaster client:load />
   </body>
 </html>
 

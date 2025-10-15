@@ -1,0 +1,44 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import DecksView from "@/components/decks/DecksView";
+import * as DeckService from "@/lib/services/deck.service";
+import { DEFAULT_USER_ID } from "@/db/supabase.client";
+
+// This page requires authentication
+// The middleware should handle the redirect if user is not authenticated
+
+// TODO: Get userId from session when authentication is implemented
+// const session = Astro.locals.session;
+// if (!session) {
+//   return Astro.redirect('/login');
+// }
+// const userId = session.user.id;
+
+const userId = DEFAULT_USER_ID;
+const supabase = Astro.locals.supabase;
+
+// Fetch decks server-side for better performance and SEO
+let initialData;
+let fetchError = false;
+
+try {
+  initialData = await DeckService.getDecks(supabase, userId, 1, 20);
+} catch (error) {
+  // eslint-disable-next-line no-console
+  console.error("Failed to fetch decks:", error);
+  fetchError = true;
+  // Provide empty data as fallback
+  initialData = {
+    data: [],
+    pagination: {
+      currentPage: 1,
+      totalPages: 0,
+      totalItems: 0,
+    },
+  };
+}
+---
+
+<Layout title="Moje Talie">
+  <DecksView client:load initialData={initialData} fetchError={fetchError} />
+</Layout>
