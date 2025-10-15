@@ -1,0 +1,45 @@
+---
+import type { BreadcrumbItem } from "@/types";
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+
+// Don't render if there are no items
+if (!items || items.length === 0) {
+  return null;
+}
+---
+
+<nav aria-label="Breadcrumb" class="border-b border-border/40 bg-muted/40">
+  <div class="container mx-auto px-4 py-3">
+    <ol class="flex items-center space-x-2 text-sm text-muted-foreground">
+      {
+        items.map((item, index) => {
+          const isLast = index === items.length - 1;
+
+          return (
+            <li class="flex items-center">
+              {index > 0 && (
+                <span class="mr-2 select-none" aria-hidden="true">
+                  /
+                </span>
+              )}
+              {isLast || !item.href ? (
+                <span class="font-medium text-foreground" aria-current={isLast ? "page" : undefined}>
+                  {item.label}
+                </span>
+              ) : (
+                <a href={item.href} class="transition-colors hover:text-foreground">
+                  {item.label}
+                </a>
+              )}
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+</nav>

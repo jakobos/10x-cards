@@ -1,5 +1,5 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import AppLayout from "@/layouts/AppLayout.astro";
 import { DeckDetailsView } from "@/components/deck/DeckDetailsView";
 import { DEFAULT_USER_ID } from "@/db/supabase.client";
 import type { DeckDetailsDto } from "@/types";
@@ -56,6 +56,6 @@ const initialData: DeckDetailsDto = {
 const pageTitle = `${deck.name} - Szczegóły talii`;
 ---
 
-<Layout title={pageTitle}>
+<AppLayout title={pageTitle} deckName={deck.name}>
   <DeckDetailsView client:load initialData={initialData} />
-</Layout>
+</AppLayout>

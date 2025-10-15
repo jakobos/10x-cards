@@ -1,0 +1,83 @@
+---
+import "../styles/global.css";
+import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import Header from "@/components/layout/Header";
+import Breadcrumbs from "@/components/layout/Breadcrumbs.astro";
+import type { BreadcrumbItem } from "@/types";
+
+interface Props {
+  title?: string;
+  deckName?: string; // Optional: name of the deck for breadcrumbs
+}
+
+const { title = "10x Cards", deckName } = Astro.props;
+
+// Generate breadcrumbs automatically based on current path
+const pathname = Astro.url.pathname;
+const breadcrumbs: BreadcrumbItem[] = [];
+
+// Always start with "Moje Talie" if we're not on the decks list page
+if (pathname !== "/app/decks") {
+  breadcrumbs.push({ label: "Moje Talie", href: "/app/decks" });
+}
+
+// Parse the path to determine what additional breadcrumbs to add
+const deckIdMatch = pathname.match(/\/app\/decks\/([^/]+)/);
+if (deckIdMatch) {
+  const deckId = deckIdMatch[1];
+
+  // Add deck name breadcrumb
+  if (deckName) {
+    // If we're on the generate page, make the deck name a link
+    if (pathname.includes("/generate")) {
+      breadcrumbs.push({ label: deckName, href: `/app/decks/${deckId}` });
+    } else {
+      // If we're on the deck details page, it's the current page
+      breadcrumbs.push({ label: deckName });
+    }
+  }
+
+  // Add "Generuj fiszki AI" if we're on the generate page
+  if (pathname.includes("/generate")) {
+    breadcrumbs.push({ label: "Generuj fiszki AI" });
+  }
+}
+
+// If we're on the main decks page, show just "Moje Talie"
+if (pathname === "/app/decks") {
+  breadcrumbs.push({ label: "Moje Talie" });
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <TooltipProvider client:load>
+      <div class="min-h-screen flex flex-col">
+        <Header client:load />
+        {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
+        <main class="flex-1 container mx-auto px-4 py-6">
+          <slot />
+        </main>
+      </div>
+    </TooltipProvider>
+    <Toaster client:load />
+  </body>
+</html>
+
+<style>
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
+</style>

@@ -202,3 +202,13 @@ export interface FlashcardCandidateViewModel extends FlashcardCandidateDto {
  */
 export type GenerationStep = "input" | "loading" | "review" | "submitting" | "error";
 // #endregion
+
+// #region Layout and Navigation
+/**
+ * Represents a single item in the breadcrumbs navigation.
+ */
+export interface BreadcrumbItem {
+  label: string; // Text label to display (e.g., "Moje Talie")
+  href?: string; // Optional URL. The last item typically is not a link.
+}
+// #endregion

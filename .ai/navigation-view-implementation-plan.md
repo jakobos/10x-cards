@@ -34,12 +34,12 @@ src/layouts/AppLayout.astro
 ## 4. Szczegóły komponentów
 
 ### `AppLayout.astro`
-- **Opis komponentu**: Główny layout dla wszystkich stron aplikacji wymagających autoryzacji. Będzie odpowiedzialny za weryfikację sesji użytkownika na serwerze, przekierowanie do strony logowania w przypadku braku sesji oraz renderowanie globalnych komponentów UI (`Header`, `Breadcrumbs`) i treści właściwej strony (`<slot />`).
+- **Opis komponentu**: Główny layout dla wszystkich stron aplikacji wymagających autoryzacji. Będzie odpowiedzialny za weryfikację sesji użytkownika na serwerze, przekierowanie do strony logowania w przypadku braku sesji oraz renderowanie globalnych komponentów UI (`Header`, `Breadcrumbs`) i treści właściwej strony (`<slot />`). **Automatycznie generuje breadcrumbs na podstawie URL path.**
 - **Główne elementy**: Komponenty `Header`, `Breadcrumbs` oraz `<slot />` Astro.
 - **Obsługiwane interakcje**: Brak, komponent strukturalny.
 - **Obsługiwana walidacja**: Sprawdzenie istnienia aktywnej sesji użytkownika. W przypadku jej braku, nastąpi przekierowanie na stronę logowania.
-- **Typy**: `Session` z `@supabase/supabase-js`.
-- **Propsy**: `title: string`, `breadcrumbs?: BreadcrumbItem[]`.
+- **Typy**: `Session` z `@supabase/supabase-js`, `BreadcrumbItem` (generowany wewnętrznie).
+- **Propsy**: `title?: string`, `deckName?: string` (opcjonalne, używane do wyświetlania nazwy talii w breadcrumbs).
 
 ### `Header.tsx`
 - **Opis komponentu**: Komponent React renderujący główny nagłówek aplikacji. Zawiera link do listy talii oraz menu użytkownika.
@@ -118,25 +118,38 @@ Głównym warunkiem jest **autoryzacja użytkownika**.
 - **Błąd pobierania sesji**: Jeśli wystąpi błąd podczas pobierania sesji na serwerze, należy to potraktować jako brak sesji i przekierować użytkownika na stronę logowania.
 
 ## 11. Kroki implementacji
-1.  **Stworzenie komponentów**: Utworzyć pliki dla nowych komponentów:
+
+### ✅ Zrealizowane kroki (Faza 1 - bez autoryzacji)
+1.  **✅ Dodanie typów**:
+    - Dodano typ `BreadcrumbItem` do `src/types.ts`.
+2.  **✅ Stworzenie komponentów**: Utworzono pliki dla nowych komponentów:
     - `src/layouts/AppLayout.astro`
     - `src/components/layout/Header.tsx`
-    - `src/components/layout/UserNav.tsx`
     - `src/components/layout/Breadcrumbs.astro`
-2.  **Implementacja `AppLayout.astro`**:
-    - Dodać logikę weryfikacji sesji Supabase po stronie serwera.
-    - W przypadku braku sesji, dodać przekierowanie do `/login`.
-    - Zaimplementować strukturę HTML/Astro z komponentami `Header` i `Breadcrumbs` oraz `<slot />`.
-    - Przekazać obiekt `user` i `breadcrumbs` jako propsy do komponentów podrzędnych.
-3.  **Implementacja `Header.tsx`**:
-    - Stworzyć statyczną strukturę nagłówka z linkiem "Moje Talie" oraz zaimportować i użyć komponentu `UserNav`, przekazując do niego props `user`.
-4.  **Implementacja `UserNav.tsx`**:
-    - Zbudować interfejs menu przy użyciu komponentów `DropdownMenu` z `shadcn/ui`.
-    - Dodać logikę obsługi wylogowania, która wywołuje `supabase.auth.signOut()` i przekierowuje użytkownika.
-    - Dodać obsługę błędów dla procesu wylogowania.
-5.  **Implementacja `Breadcrumbs.astro`**:
-    - Stworzyć logikę renderowania listy linków na podstawie propsa `items`.
-    - Ostylować komponent zgodnie z projektem (np. używając separatorów).
-6.  **Aktualizacja stron**: Zmodyfikować istniejące strony w katalogu `/app` (np. `src/pages/app/decks.astro`), aby używały nowego `AppLayout.astro` zamiast domyślnego. Przekazać odpowiednie propsy `title` i `breadcrumbs` do layoutu.
-7.  **Styling**: Użyć Tailwind CSS do ostylowania wszystkich nowych komponentów w celu zapewnienia spójności wizualnej z resztą aplikacji.
+3.  **✅ Implementacja `AppLayout.astro`**:
+    - Zaimplementowano strukturę HTML/Astro z komponentami `Header` i `Breadcrumbs` oraz `<slot />`.
+    - **Automatyczne generowanie breadcrumbs** na podstawie `Astro.url.pathname`:
+      - `/app/decks` → `[{ label: "Moje Talie" }]`
+      - `/app/decks/[deckId]` → `[{ label: "Moje Talie", href: "/app/decks" }, { label: deckName }]`
+      - `/app/decks/[deckId]/generate` → `[{ label: "Moje Talie", href: "/app/decks" }, { label: deckName, href: "/app/decks/${deckId}" }, { label: "Generuj fiszki AI" }]`
+    - Propsy: `title` i opcjonalny `deckName` (zamiast `breadcrumbs`).
+    - ⚠️ **Pominięto**: Weryfikacja sesji i przekierowanie (zostanie dodane w fazie autoryzacji).
+4.  **✅ Implementacja `Header.tsx`**:
+    - Utworzono sticky nagłówek z linkiem "Moje Talie".
+    - ⚠️ **Pominięto**: Komponent `UserNav` (zostanie dodany w fazie autoryzacji).
+5.  **✅ Implementacja `Breadcrumbs.astro`**:
+    - Utworzono logikę renderowania listy linków na podstawie propsa `items`.
+    - Ostylowano komponent używając Tailwind CSS z separatorami.
+    - Dodano odpowiednią semantykę ARIA dla dostępności.
+6.  **✅ Aktualizacja stron**: Zmodyfikowano wszystkie strony w katalogu `/app`:
+    - `src/pages/app/decks.astro` - używa `AppLayout` bez dodatkowych propsów (breadcrumbs generowane automatycznie)
+    - `src/pages/app/decks/[deckId].astro` - przekazuje `deckName={deck.name}` do `AppLayout`
+    - `src/pages/app/decks/[deckId]/generate.astro` - przekazuje `deckName={deck.name}` do `AppLayout`
+7.  **✅ Styling**: Użyto Tailwind CSS do ostylowania wszystkich nowych komponentów.
+
+### 🔮 Zaplanowane kroki (Faza 2 - autoryzacja)
+Zostaną zrealizowane w późniejszym etapie:
+- **Weryfikacja sesji w `AppLayout.astro`**: Dodanie logiki sprawdzania sesji Supabase i przekierowania do `/login`.
+- **Implementacja `UserNav.tsx`**: Komponent menu użytkownika z dropdown menu, opcjami ustawień i wylogowania.
+- **Strona logowania**: Utworzenie strony `/login` dla niezalogowanych użytkowników.
 

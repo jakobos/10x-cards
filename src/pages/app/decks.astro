@@ -1,5 +1,5 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import AppLayout from "@/layouts/AppLayout.astro";
 import DecksView from "@/components/decks/DecksView";
 import * as DeckService from "@/lib/services/deck.service";
 import { DEFAULT_USER_ID } from "@/db/supabase.client";
@@ -39,6 +39,6 @@ try {
 }
 ---
 
-<Layout title="Moje Talie">
+<AppLayout title="Moje Talie">
   <DecksView client:load initialData={initialData} fetchError={fetchError} />
-</Layout>
+</AppLayout>
