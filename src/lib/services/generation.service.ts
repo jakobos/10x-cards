@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 
 import type { SupabaseClient } from "../../db/supabase.client.ts";
 import type { FlashcardCandidateDto } from "../../types.ts";
+import { openRouterService } from "./openrouter.service.ts";
 
 /**
  * Result of flashcard generation
@@ -34,8 +35,7 @@ export async function generateCandidates(
     const sourceTextHash = createHash("md5").update(sourceText).digest("hex");
 
     // 2. Call AI service to generate flashcard candidates
-    // For development, use mock data instead of calling external AI service
-    const candidates = await callAIService();
+    const { candidates, model } = await callAIService(sourceText);
 
     // 3. Calculate generation duration
     const endTime = performance.now();
@@ -47,7 +47,7 @@ export async function generateCandidates(
       .insert({
         user_id: userId,
         deck_id: deckId,
-        model: "mock-model", // TODO: Replace with actual model name
+        model,
         generated_count: candidates.length,
         source_text_hash: sourceTextHash,
         source_text_length: sourceText.length,
@@ -72,31 +72,87 @@ export async function generateCandidates(
 }
 
 /**
- * Calls the AI service to generate flashcard candidates.
- * Currently returns mock data for development.
- *
- * @returns List of flashcard candidates
+ * Result of the AI service call including candidates and model information.
  */
-async function callAIService(): Promise<FlashcardCandidateDto[]> {
-  // TODO: Implement actual AI service call to OpenRouter
-  // For now, return mock data for development
+interface AIServiceResult {
+  candidates: FlashcardCandidateDto[];
+  model: string;
+}
 
-  // Simulate API call delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+/**
+ * Schema for the expected JSON response from the AI model.
+ */
+const FLASHCARD_GENERATION_SCHEMA = {
+  type: "object",
+  properties: {
+    flashcards: {
+      type: "array",
+      description: "Array of generated flashcard candidates",
+      items: {
+        type: "object",
+        properties: {
+          front: {
+            type: "string",
+            description: "The question or prompt for the flashcard (front side)",
+          },
+          back: {
+            type: "string",
+            description: "The answer or explanation for the flashcard (back side)",
+          },
+        },
+        required: ["front", "back"],
+        additionalProperties: false,
+      },
+      minItems: 3,
+      maxItems: 10,
+    },
+  },
+  required: ["flashcards"],
+  additionalProperties: false,
+};
 
-  // Return mock flashcard candidates
-  return [
-    {
-      front: "What is the main topic of the provided text?",
-      back: "This is a mock answer based on the source text.",
-    },
-    {
-      front: "What are the key concepts mentioned?",
-      back: "These are mock key concepts from the text.",
-    },
-    {
-      front: "How would you summarize the main idea?",
-      back: "This is a mock summary of the text.",
-    },
-  ];
+/**
+ * Calls the AI service (OpenRouter) to generate flashcard candidates.
+ *
+ * @param sourceText - The text to generate flashcards from
+ * @returns List of flashcard candidates and the model used
+ */
+async function callAIService(sourceText: string): Promise<AIServiceResult> {
+  const model = "openai/gpt-4o-mini";
+
+  const systemPrompt = `You are an expert educational content creator specializing in creating high-quality flashcards.
+
+Your task is to analyze the provided text and generate flashcards that:
+- Focus on key concepts, definitions, and important information
+- Are clear, concise, and easy to understand
+- Have questions (front) that are specific and unambiguous
+- Have answers (back) that are accurate and complete
+- Are pedagogically effective for learning and retention
+
+Generate between 5-8 flashcards based on the content richness of the text.`;
+
+  const userPrompt = `Generate flashcards from the following text:
+
+${sourceText}
+
+Create flashcards that capture the most important information from this text.`;
+
+  try {
+    const result = await openRouterService.generateJson<{ flashcards: FlashcardCandidateDto[] }>({
+      systemPrompt,
+      userPrompt,
+      jsonSchema: FLASHCARD_GENERATION_SCHEMA,
+      model,
+      temperature: 0.7,
+      maxTokens: 2048,
+    });
+
+    return {
+      candidates: result.flashcards,
+      model,
+    };
+  } catch (error) {
+    // Re-throw the error with additional context
+    throw new Error(`AI service call failed: ${error instanceof Error ? error.message : "Unknown error"}`);
+  }
 }

@@ -2,6 +2,14 @@ import type { APIRoute } from "astro";
 import { z } from "zod";
 
 import { DEFAULT_USER_ID } from "../../../db/supabase.client.ts";
+import {
+  AuthenticationError,
+  BadRequestError,
+  NetworkError,
+  ParsingError,
+  RateLimitError,
+  ServerError,
+} from "../../../lib/errors.ts";
 import { aiRateLimiter } from "../../../lib/rate-limiter.ts";
 import { generateCandidates } from "../../../lib/services/generation.service.ts";
 import type { GenerateFlashcardsCommand, GenerateFlashcardsResponseDto } from "../../../types.ts";
@@ -76,10 +84,72 @@ export const POST: APIRoute = async (context) => {
   } catch (error) {
     console.error("Error generating flashcards:", error);
 
+    // Handle custom errors from OpenRouter service
+    if (error instanceof AuthenticationError) {
+      return new Response(
+        JSON.stringify({
+          error: "Authentication error",
+          message: "Failed to authenticate with AI service. Please contact support.",
+        }),
+        { status: 500, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (error instanceof RateLimitError) {
+      return new Response(
+        JSON.stringify({
+          error: "AI service rate limit",
+          message: "AI service rate limit exceeded. Please try again in a few moments.",
+        }),
+        { status: 503, headers: { "Content-Type": "application/json", "Retry-After": "60" } }
+      );
+    }
+
+    if (error instanceof BadRequestError) {
+      return new Response(
+        JSON.stringify({
+          error: "Invalid AI request",
+          message: "Failed to process the request. The text format may be incompatible.",
+        }),
+        { status: 422, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (error instanceof NetworkError) {
+      return new Response(
+        JSON.stringify({
+          error: "Network error",
+          message: "Unable to reach AI service. Please check your connection and try again.",
+        }),
+        { status: 503, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (error instanceof ParsingError) {
+      return new Response(
+        JSON.stringify({
+          error: "AI response error",
+          message: "AI service returned an invalid response. Please try again.",
+        }),
+        { status: 502, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    if (error instanceof ServerError) {
+      return new Response(
+        JSON.stringify({
+          error: "AI service error",
+          message: "AI service is temporarily unavailable. Please try again later.",
+        }),
+        { status: 503, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Generic error fallback
     return new Response(
       JSON.stringify({
         error: "Internal server error",
-        message: error instanceof Error ? error.message : "Unknown error",
+        message: error instanceof Error ? error.message : "An unexpected error occurred",
       }),
       { status: 500, headers: { "Content-Type": "application/json" } }
     );
