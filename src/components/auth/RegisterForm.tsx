@@ -37,27 +37,24 @@ export default function RegisterForm() {
     setLoading(true);
 
     try {
-      // TODO: Implement Supabase auth integration
-      // const { error } = await supabase.auth.signUp({
-      //   email,
-      //   password,
-      //   options: {
-      //     emailRedirectTo: `${window.location.origin}/login`
-      //   }
-      // });
-      // if (error) throw error;
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password, confirmPassword }),
+      });
 
-      console.log("Registration attempt:", { email });
-      // Placeholder for demonstration
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Wystąpił błąd podczas rejestracji");
+      }
 
       setSuccess(true);
-    } catch (err: any) {
-      if (err?.message?.includes("already registered")) {
-        setError("Użytkownik z tym adresem email już istnieje");
-      } else {
-        setError("Wystąpił błąd podczas rejestracji. Spróbuj ponownie.");
-      }
+    } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : "Wystąpił nieoczekiwany błąd";
+      setError(errorMessage);
       console.error("Registration error:", err);
     } finally {
       setLoading(false);
