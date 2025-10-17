@@ -2,16 +2,17 @@
 import "../styles/global.css";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import PublicHeader from "@/components/layout/PublicHeader";
 
 interface Props {
   title?: string;
 }
 
-const { title = "10x Astro Starter" } = Astro.props;
+const { title = "10x Cards" } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="pl">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -21,7 +22,12 @@ const { title = "10x Astro Starter" } = Astro.props;
   </head>
   <body>
     <TooltipProvider client:load>
-      <slot />
+      <div class="min-h-screen flex flex-col">
+        <PublicHeader client:load />
+        <main class="flex-1 container mx-auto px-4 py-6">
+          <slot />
+        </main>
+      </div>
     </TooltipProvider>
     <Toaster client:load />
   </body>
