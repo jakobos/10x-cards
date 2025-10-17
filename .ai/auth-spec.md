@@ -25,14 +25,14 @@ Wprowadzone zostaną nowe strony i modyfikacje w istniejących layoutach w celu 
 
 ### 1.2. Komponenty React
 
-Cała logika formularzy, walidacji po stronie klienta i interakcji z API Supabase Auth zostanie zamknięta w komponentach React. Zostanie utworzony nowy katalog `src/components/auth`.
+Cała logika formularzy, walidacji po stronie klienta i interakcji z API Supabase Auth zostanie zamknięta w komponentach React. Zostaną utworzone nowe katalogi `src/components/auth` oraz `src/components/account` w celu logicznego rozdzielenia komponentów.
 
-**Nowe komponenty (w `./src/components/auth`):**
+**Komponenty publiczne (w `./src/components/auth`):**
 
 *   `RegisterForm.tsx`:
     *   **Odpowiedzialność**: Formularz rejestracji z polami na email i hasło.
     *   **Interakcja**: Wywołuje funkcję `supabase.auth.signUp()` z Supabase JS client.
-    *   **Walidacja**: Sprawdza poprawność formatu emaila, wymagania co do siły hasła (zgodnie z US-003b). Błędy (np. "Użytkownik już istnieje") będą wyświetlane pod odpowiednimi polami.
+    *   **Walidacja**: Sprawdza poprawność formatu emaila oraz siłę hasła (minimum 8 znaków, w tym jedna wielka litera i jedna cyfra). Błędy (np. "Użytkownik już istnieje") będą wyświetlane pod odpowiednimi polami.
     *   **Scenariusze**:
         *   Sukces: Użytkownik jest informowany o konieczności potwierdzenia adresu email, a następnie przekierowywany na stronę logowania z komunikatem.
         *   Błąd: Wyświetla stosowny komunikat błędu.
@@ -55,19 +55,23 @@ Cała logika formularzy, walidacji po stronie klienta i interakcji z API Supabas
 *   `UpdatePasswordForm.tsx`:
     *   **Odpowiedzialność**: Formularz do ustawienia nowego hasła. Dostępny tylko poprzez link z emaila.
     *   **Interakcja**: Wywołuje `supabase.auth.updateUser()` z nowym hasłem. Sesja użytkownika jest pobierana z parametrów URL (magic link).
-    *   **Walidacja**: Sprawdza siłę nowego hasła i czy oba pola z hasłem są identyczne.
+    *   **Walidacja**: Sprawdza siłę nowego hasła (minimum 8 znaków, w tym jedna wielka litera i jedna cyfra) i czy oba pola z hasłem są identyczne.
     *   **Scenariusze**:
         *   Sukces: Wyświetla komunikat "Hasło zostało zmienione." i przekierowuje na stronę logowania.
         *   Błąd: Wyświetla komunikat o błędzie (np. "Link wygasł").
 
+**Komponenty prywatne (w `./src/components/account`):**
+
 *   `AccountSettingsView.tsx`:
     *   **Odpowiedzialność**: Komponent-kontener dla ustawień konta, zawierający dwa poniższe komponenty.
-    *   **Lokalizacja**: `/src/components/account/AccountSettingsView.tsx`
 
 *   `ChangePasswordForm.tsx`:
     *   **Odpowiedzialność**: Formularz zmiany hasła dla zalogowanego użytkownika (stare hasło, nowe hasło, powtórz nowe hasło).
     *   **Interakcja**: Wysyła dane do dedykowanego endpointu API (`/api/user/change-password`), który po stronie serwera zweryfikuje stare hasło i wywoła `supabase.auth.updateUser()`.
     *   **Walidacja**: Jak w `UpdatePasswordForm.tsx`, dodatkowo waliduje pole "Obecne hasło".
+    *   **Scenariusze**:
+        *   Sukces: Wyświetla komunikat "Hasło zostało pomyślnie zmienione".
+        *   Błąd: Wyświetla odpowiedni komunikat błędu (np. "Błędne obecne hasło").
 
 *   `DeleteAccountDialog.tsx`:
     *   **Odpowiedzialność**: Komponent modalny z potwierdzeniem usunięcia konta.
