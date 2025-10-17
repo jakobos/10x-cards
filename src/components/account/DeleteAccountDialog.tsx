@@ -29,23 +29,20 @@ export default function DeleteAccountDialog() {
     setError("");
 
     try {
-      // TODO: Implement API call
-      // const response = await fetch('/api/user', {
-      //   method: 'DELETE',
-      // });
-      //
-      // if (!response.ok) {
-      //   throw new Error('Failed to delete account');
-      // }
-      //
-      // // Redirect to home page after successful deletion
-      // window.location.href = '/';
+      const response = await fetch("/api/user", {
+        method: "DELETE",
+      });
 
-      console.log("Delete account attempt");
-      // Placeholder for demonstration
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    } catch (err) {
-      setError("Wystąpił błąd podczas usuwania konta. Spróbuj ponownie.");
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to delete account");
+      }
+
+      // Redirect to home page after successful deletion
+      window.location.href = "/";
+    } catch (err: any) {
+      setError(err.message || "Wystąpił błąd podczas usuwania konta. Spróbuj ponownie.");
       console.error("Delete account error:", err);
     } finally {
       setLoading(false);

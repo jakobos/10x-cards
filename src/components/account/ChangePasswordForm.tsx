@@ -42,21 +42,17 @@ export default function ChangePasswordForm() {
     setLoading(true);
 
     try {
-      // TODO: Implement API call
-      // const response = await fetch('/api/user/change-password', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ currentPassword, newPassword }),
-      // });
-      //
-      // if (!response.ok) {
-      //   const data = await response.json();
-      //   throw new Error(data.message || 'Failed to change password');
-      // }
+      const response = await fetch("/api/user/change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
 
-      console.log("Change password attempt");
-      // Placeholder for demonstration
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to change password");
+      }
 
       setSuccess(true);
       setCurrentPassword("");
@@ -66,11 +62,7 @@ export default function ChangePasswordForm() {
       // Hide success message after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
     } catch (err: any) {
-      if (err?.message?.includes("incorrect")) {
-        setError("Nieprawidłowe obecne hasło");
-      } else {
-        setError("Wystąpił błąd podczas zmiany hasła. Spróbuj ponownie.");
-      }
+      setError(err.message || "Wystąpił błąd podczas zmiany hasła. Spróbuj ponownie.");
       console.error("Change password error:", err);
     } finally {
       setLoading(false);
