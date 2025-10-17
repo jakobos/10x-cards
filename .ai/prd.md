@@ -71,8 +71,8 @@ Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten
 - Opis: Jako nowy użytkownik, chcę móc założyć konto w aplikacji, abym mógł przechowywać swoje talie i fiszki.
 - Kryteria akceptacji:
   1. Na stronie głównej znajduje się przycisk "Zarejestruj się".
-  2. Po pomyślnej rejestracji i pierwszym logowaniu, jestem przenoszony do głównego panelu aplikacji.
-  3. Widzę ekran powitalny z przyciskiem zachęcającym do stworzenia pierwszej talii.
+  2. Po pomyślnej rejestracji i pierwszym logowaniu, jestem przenoszony do głównego panelu aplikacji - Moje talie.
+  3. Widzę ekran Moje talie z przyciskiem zachęcającym do stworzenia pierwszej talii.
 
 - ID: US-002
 - Tytuł: Logowanie użytkownika
@@ -85,15 +85,39 @@ Tworzenie wysokiej jakości fiszek jest skuteczną metodą nauki, ale proces ten
 - Tytuł: Wylogowanie użytkownika
 - Opis: Jako zalogowany użytkownik, chcę móc się wylogować, aby zabezpieczyć swoje konto.
 - Kryteria akceptacji:
-  1. W interfejsie aplikacji dostępny jest przycisk "Wyloguj".
+  1. W nawigacji po prawej stronie dostępny jest przycisk "Wyloguj".
   2. Po kliknięciu jestem wylogowywany i przenoszony na stronę główną.
+
+- ID: US-003a
+- Tytuł: Odzyskiwanie hasła
+- Opis: Jako użytkownik, który zapomniał hasła, chcę móc je zresetować, aby odzyskać dostęp do swojego konta.
+- Kryteria akceptacji:
+  1. Na stronie logowania znajduje się link "Zapomniałem hasła".
+  2. Po kliknięciu wyświetla się formularz z polem na adres email.
+  3. Po wprowadzeniu adresu email i zatwierdzeniu, system wysyła link do resetowania hasła.
+  4. Po pomyślnym zresetowaniu hasła, użytkownik może zalogować się używając nowego hasła.
+  5. System wyświetla komunikat potwierdzający zmianę hasła.
+
+- ID: US-003b
+- Tytuł: Zmiana hasła
+- Opis: Jako użytkownik, chcę móc zmienić hasło do mojego konta, aby zachować jego bezpieczeństwo.
+- Kryteria akceptacji:
+  1. W nawigacji po prawej stronie dostępny jest przycisk "Ustawienia konta".
+  2. Po kliknięciu otwiera się widok "Ustawienia konta".
+  3. W widoku "Ustawienia konta" znajduje się formularz z polami: "Obecne hasło", "Nowe hasło" i "Powtórz nowe hasło".
+  4. System waliduje, czy obecne hasło jest poprawne.
+  5. System sprawdza, czy nowe hasło spełnia wymogi bezpieczeństwa (min. 8 znaków, wielka litera, cyfra).
+  6. System weryfikuje, czy pola "Nowe hasło" i "Powtórz nowe hasło" są identyczne.
+  7. Po pomyślnej zmianie hasła wyświetla się komunikat potwierdzający.
 
 - ID: US-004
 - Tytuł: Usunięcie konta
 - Opis: Jako użytkownik, chcę mieć możliwość trwałego usunięcia swojego konta i wszystkich moich danych.
 - Kryteria akceptacji:
-  1. W ustawieniach konta znajduje się opcja "Usuń konto".
-  2. Kliknięcie opcji wyświetla okno modalne z prośbą o potwierdzenie operacji.
+  1. W nawigacji po prawej stronie dostępny jest przycisk "Ustawienia konta".
+  2. Po kliknięciu otwiera się widok "Ustawienia konta".
+  3. W widoku "Ustawienia konta" znajduje się przycisk "Usuń konto".
+  4. Po kliknięciu przycisku "Usuń konto" wyświetla się okno modalne z prośbą o potwierdzenie operacji.
   3. Po potwierdzeniu, moje konto i wszystkie powiązane z nim dane (talie, fiszki) są usuwane z bazy danych.
   4. Jestem wylogowywany i przenoszony na stronę główną.
 
