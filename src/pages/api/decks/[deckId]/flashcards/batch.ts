@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
 
-import { DEFAULT_USER_ID } from "../../../../../db/supabase.client.ts";
 import { createFromAIGeneration } from "../../../../../lib/services/flashcard.service.ts";
 import { MAX_FLASHCARD_FRONT_LENGTH, MAX_FLASHCARD_BACK_LENGTH } from "../../../../../lib/constants.ts";
 import type {
@@ -52,17 +51,20 @@ export const prerender = false;
  */
 export const POST: APIRoute = async (context) => {
   try {
-    // 1. Check if user is authenticated (using DEFAULT_USER_ID for development)
-    // TODO: Replace with actual session check when auth is implemented
-    // if (!context.locals.session) {
-    //   return new Response(
-    //     JSON.stringify({
-    //       error: "Unauthorized",
-    //       message: "You must be logged in to create flashcards",
-    //     }),
-    //     { status: 401, headers: { "Content-Type": "application/json" } }
-    //   );
-    // }
+    // 1. Check if user is authenticated
+    const user = context.locals.user;
+
+    if (!user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "You must be logged in to create flashcards",
+        }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const userId = user.id;
 
     // 2. Validate deckId from path parameters
     const deckIdValidation = deckIdSchema.safeParse(context.params.deckId);
@@ -96,7 +98,7 @@ export const POST: APIRoute = async (context) => {
     const command = validationResult.data;
 
     // 4. Call service to create flashcards
-    const createdCount = await createFromAIGeneration(command, deckId, DEFAULT_USER_ID, context.locals.supabase);
+    const createdCount = await createFromAIGeneration(command, deckId, userId, context.locals.supabase);
 
     // 5. Return success response
     const response: BatchCreateFlashcardsResponseDto = {

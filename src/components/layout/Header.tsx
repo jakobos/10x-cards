@@ -4,28 +4,34 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { UserIcon, SettingsIcon, LogOutIcon } from "lucide-react";
 
-export default function Header() {
+interface HeaderProps {
+  userEmail?: string;
+}
+
+export default function Header({ userEmail }: HeaderProps) {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
 
     try {
-      // TODO: Implement Supabase logout
-      // await supabase.auth.signOut();
-      // window.location.href = "/";
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
 
-      console.log("Logout attempt");
-      // Placeholder for demonstration
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      if (!response.ok) {
+        throw new Error("Nie udało się wylogować");
+      }
+
+      window.location.href = "/";
     } catch (error) {
       console.error("Logout error:", error);
-    } finally {
       setIsLoggingOut(false);
     }
   };
@@ -48,6 +54,17 @@ export default function Header() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
+              {userEmail && (
+                <>
+                  <DropdownMenuLabel>
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">Moje konto</p>
+                      <p className="text-xs leading-none text-muted-foreground truncate">{userEmail}</p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                </>
+              )}
               <DropdownMenuItem asChild>
                 <a href="/app/account-settings" className="flex items-center cursor-pointer">
                   <SettingsIcon className="mr-2 h-4 w-4" />

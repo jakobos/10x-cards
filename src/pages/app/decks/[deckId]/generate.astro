@@ -1,9 +1,16 @@
 ---
 import AppLayout from "@/layouts/AppLayout.astro";
 import { GenerationClientComponent } from "@/components/generation/GenerationClientComponent";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
 export const prerender = false;
+
+// Get authenticated user from locals (set by middleware)
+const user = Astro.locals.user;
+
+// Defense in depth - redirect if user is not authenticated
+if (!user) {
+  return Astro.redirect("/login");
+}
 
 const { deckId } = Astro.params;
 
@@ -14,12 +21,12 @@ if (!deckId || typeof deckId !== "string") {
 
 const supabase = Astro.locals.supabase;
 
-// Check if deck exists and belongs to user (using DEFAULT_USER_ID for development)
+// Check if deck exists and belongs to user
 const { data: deck, error: deckError } = await supabase
   .from("decks")
   .select("id, name")
   .eq("id", deckId)
-  .eq("user_id", DEFAULT_USER_ID)
+  .eq("user_id", user.id)
   .single();
 
 if (deckError || !deck) {

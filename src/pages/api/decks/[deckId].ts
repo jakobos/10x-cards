@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
 
-import { DEFAULT_USER_ID } from "../../../db/supabase.client.ts";
 import * as DeckService from "../../../lib/services/deck.service.ts";
 
 export const prerender = false;
@@ -22,18 +21,17 @@ const updateDeckSchema = z.object({
 export const GET: APIRoute = async ({ params, locals }) => {
   try {
     const supabase = locals.supabase;
+    const user = locals.user;
 
-    // TODO: Get userId from session when authentication is implemented
-    // const session = locals.session;
-    // if (!session) {
-    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-    //     status: 401,
-    //     headers: { "Content-Type": "application/json" },
-    //   });
-    // }
-    // const userId = session.user.id;
+    // Check if user is authenticated
+    if (!user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
-    const userId = DEFAULT_USER_ID;
+    const userId = user.id;
 
     // Validate deckId parameter
     const validation = deckIdParamSchema.safeParse(params);
@@ -98,18 +96,17 @@ export const GET: APIRoute = async ({ params, locals }) => {
 export const PATCH: APIRoute = async ({ params, request, locals }) => {
   try {
     const supabase = locals.supabase;
+    const user = locals.user;
 
-    // TODO: Get userId from session when authentication is implemented
-    // const session = locals.session;
-    // if (!session) {
-    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-    //     status: 401,
-    //     headers: { "Content-Type": "application/json" },
-    //   });
-    // }
-    // const userId = session.user.id;
+    // Check if user is authenticated
+    if (!user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
-    const userId = DEFAULT_USER_ID;
+    const userId = user.id;
 
     // Validate deckId parameter
     const paramValidation = deckIdParamSchema.safeParse(params);
@@ -193,18 +190,17 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
 export const DELETE: APIRoute = async ({ params, locals }) => {
   try {
     const supabase = locals.supabase;
+    const user = locals.user;
 
-    // TODO: Get userId from session when authentication is implemented
-    // const session = locals.session;
-    // if (!session) {
-    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-    //     status: 401,
-    //     headers: { "Content-Type": "application/json" },
-    //   });
-    // }
-    // const userId = session.user.id;
+    // Check if user is authenticated
+    if (!user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
-    const userId = DEFAULT_USER_ID;
+    const userId = user.id;
 
     // Validate deckId parameter
     const validation = deckIdParamSchema.safeParse(params);

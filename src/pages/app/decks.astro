@@ -2,19 +2,18 @@
 import AppLayout from "@/layouts/AppLayout.astro";
 import DecksView from "@/components/decks/DecksView";
 import * as DeckService from "@/lib/services/deck.service";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 
-// This page requires authentication
-// The middleware should handle the redirect if user is not authenticated
+export const prerender = false;
 
-// TODO: Get userId from session when authentication is implemented
-// const session = Astro.locals.session;
-// if (!session) {
-//   return Astro.redirect('/login');
-// }
-// const userId = session.user.id;
+// Get authenticated user from locals (set by middleware)
+const user = Astro.locals.user;
 
-const userId = DEFAULT_USER_ID;
+// Defense in depth - redirect if user is not authenticated
+if (!user) {
+  return Astro.redirect("/login");
+}
+
+const userId = user.id;
 const supabase = Astro.locals.supabase;
 
 // Fetch decks server-side for better performance and SEO

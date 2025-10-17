@@ -23,16 +23,23 @@ export default function LoginForm() {
     setLoading(true);
 
     try {
-      // TODO: Implement Supabase auth integration
-      // const { error } = await supabase.auth.signInWithPassword({ email, password });
-      // if (error) throw error;
-      // window.location.href = "/app/decks";
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      console.log("Login attempt:", { email });
-      // Placeholder for demonstration
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Nieprawidłowy email lub hasło");
+      }
+
+      window.location.href = "/app/decks";
     } catch (err) {
-      setError("Nieprawidłowy email lub hasło");
+      const errorMessage = err instanceof Error ? err.message : "Wystąpił nieoczekiwany błąd";
+      setError(errorMessage);
       console.error("Login error:", err);
     } finally {
       setLoading(false);

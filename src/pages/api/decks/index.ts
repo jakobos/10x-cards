@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
 
-import { DEFAULT_USER_ID } from "../../../db/supabase.client.ts";
 import * as DeckService from "../../../lib/services/deck.service.ts";
 
 export const prerender = false;
@@ -23,18 +22,17 @@ const createDeckSchema = z.object({
 export const GET: APIRoute = async ({ url, locals }) => {
   try {
     const supabase = locals.supabase;
+    const user = locals.user;
 
-    // TODO: Get userId from session when authentication is implemented
-    // const session = locals.session;
-    // if (!session) {
-    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-    //     status: 401,
-    //     headers: { "Content-Type": "application/json" },
-    //   });
-    // }
-    // const userId = session.user.id;
+    // Check if user is authenticated
+    if (!user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
-    const userId = DEFAULT_USER_ID;
+    const userId = user.id;
 
     // Validate query parameters
     const queryParams = {
@@ -90,18 +88,17 @@ export const GET: APIRoute = async ({ url, locals }) => {
 export const POST: APIRoute = async ({ request, locals }) => {
   try {
     const supabase = locals.supabase;
+    const user = locals.user;
 
-    // TODO: Get userId from session when authentication is implemented
-    // const session = locals.session;
-    // if (!session) {
-    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-    //     status: 401,
-    //     headers: { "Content-Type": "application/json" },
-    //   });
-    // }
-    // const userId = session.user.id;
+    // Check if user is authenticated
+    if (!user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
-    const userId = DEFAULT_USER_ID;
+    const userId = user.id;
 
     // Parse and validate request body
     const body = await request.json();

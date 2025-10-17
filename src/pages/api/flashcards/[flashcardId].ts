@@ -1,6 +1,5 @@
 import type { APIRoute } from "astro";
 
-import { DEFAULT_USER_ID } from "../../../db/supabase.client.ts";
 import { crudRateLimiter } from "../../../lib/rate-limiter.ts";
 import * as FlashcardService from "../../../lib/services/flashcard.service.ts";
 import { flashcardIdParamSchema, updateFlashcardSchema } from "../../../lib/validation/flashcard.schemas.ts";
@@ -14,18 +13,17 @@ export const prerender = false;
 export const PATCH: APIRoute = async ({ params, request, locals }) => {
   try {
     const supabase = locals.supabase;
+    const user = locals.user;
 
-    // TODO: Get userId from session when authentication is implemented
-    // const session = locals.session;
-    // if (!session) {
-    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-    //     status: 401,
-    //     headers: { "Content-Type": "application/json" },
-    //   });
-    // }
-    // const userId = session.user.id;
+    // Check if user is authenticated
+    if (!user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
-    const userId = DEFAULT_USER_ID;
+    const userId = user.id;
 
     // Check rate limit
     if (crudRateLimiter.isRateLimited(userId)) {
@@ -123,18 +121,17 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
 export const DELETE: APIRoute = async ({ params, locals }) => {
   try {
     const supabase = locals.supabase;
+    const user = locals.user;
 
-    // TODO: Get userId from session when authentication is implemented
-    // const session = locals.session;
-    // if (!session) {
-    //   return new Response(JSON.stringify({ error: "Unauthorized" }), {
-    //     status: 401,
-    //     headers: { "Content-Type": "application/json" },
-    //   });
-    // }
-    // const userId = session.user.id;
+    // Check if user is authenticated
+    if (!user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
 
-    const userId = DEFAULT_USER_ID;
+    const userId = user.id;
 
     // Check rate limit
     if (crudRateLimiter.isRateLimited(userId)) {

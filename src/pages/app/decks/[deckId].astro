@@ -1,10 +1,17 @@
 ---
 import AppLayout from "@/layouts/AppLayout.astro";
 import { DeckDetailsView } from "@/components/deck/DeckDetailsView";
-import { DEFAULT_USER_ID } from "@/db/supabase.client";
 import type { DeckDetailsDto } from "@/types";
 
 export const prerender = false;
+
+// Get authenticated user from locals (set by middleware)
+const user = Astro.locals.user;
+
+// Defense in depth - redirect if user is not authenticated
+if (!user) {
+  return Astro.redirect("/login");
+}
 
 const { deckId } = Astro.params;
 
@@ -20,7 +27,7 @@ const { data: deck, error: deckError } = await supabase
   .from("decks")
   .select("id, name, created_at")
   .eq("id", deckId)
-  .eq("user_id", DEFAULT_USER_ID)
+  .eq("user_id", user.id)
   .single();
 
 if (deckError || !deck) {

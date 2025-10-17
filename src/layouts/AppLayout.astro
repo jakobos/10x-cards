@@ -13,6 +13,14 @@ interface Props {
 
 const { title = "10x Cards", deckName } = Astro.props;
 
+// Get user from locals (set by middleware)
+const user = Astro.locals.user;
+
+// Redirect to login if user is not authenticated (defense in depth)
+if (!user) {
+  return Astro.redirect("/login");
+}
+
 // Generate breadcrumbs automatically based on current path
 const pathname = Astro.url.pathname;
 const breadcrumbs: BreadcrumbItem[] = [];
@@ -62,7 +70,7 @@ if (pathname === "/app/decks") {
   <body>
     <TooltipProvider client:load>
       <div class="min-h-screen flex flex-col">
-        <Header client:load />
+        <Header client:load userEmail={user?.email} />
         {breadcrumbs.length > 0 && <Breadcrumbs items={breadcrumbs} />}
         <main class="flex-1 container mx-auto px-4 py-6">
           <slot />

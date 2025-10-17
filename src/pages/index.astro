@@ -1,6 +1,14 @@
 ---
 import Welcome from "../components/Welcome.astro";
 import Layout from "../layouts/Layout.astro";
+
+export const prerender = false;
+
+// Redirect authenticated users to the app
+const user = Astro.locals.user;
+if (user) {
+  return Astro.redirect("/app/decks");
+}
 ---
 
 <Layout>

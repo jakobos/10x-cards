@@ -1,7 +1,6 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
 
-import { DEFAULT_USER_ID } from "../../../db/supabase.client.ts";
 import {
   AuthenticationError,
   BadRequestError,
@@ -29,16 +28,30 @@ export const prerender = false;
  * POST /api/ai/generate-flashcards
  *
  * Generates flashcard candidates from source text using AI.
- * Uses DEFAULT_USER_ID for development (no auth required at this stage).
  *
  * @param {GenerateFlashcardsCommand} body - Request body containing source text
  * @returns {GenerateFlashcardsResponseDto} Generation ID and flashcard candidates
  */
 export const POST: APIRoute = async (context) => {
   try {
-    // 1. Check rate limit (5 requests per 10 minutes)
-    if (aiRateLimiter.isRateLimited(DEFAULT_USER_ID)) {
-      const remaining = aiRateLimiter.getRemainingRequests(DEFAULT_USER_ID);
+    // 1. Check if user is authenticated
+    const user = context.locals.user;
+
+    if (!user) {
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized",
+          message: "You must be logged in to generate flashcards",
+        }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const userId = user.id;
+
+    // 2. Check rate limit (5 requests per 10 minutes)
+    if (aiRateLimiter.isRateLimited(userId)) {
+      const remaining = aiRateLimiter.getRemainingRequests(userId);
       return new Response(
         JSON.stringify({
           error: "Too many requests",
@@ -55,7 +68,7 @@ export const POST: APIRoute = async (context) => {
       );
     }
 
-    // 2. Parse and validate request body
+    // 3. Parse and validate request body
     const rawBody = await context.request.json();
     const validationResult = generateFlashcardsSchema.safeParse(rawBody);
 
@@ -71,10 +84,10 @@ export const POST: APIRoute = async (context) => {
 
     const { sourceText, deckId } = validationResult.data;
 
-    // 3. Call AI service to generate flashcard candidates
-    const result = await generateCandidates(sourceText, deckId, DEFAULT_USER_ID, context.locals.supabase);
+    // 4. Call AI service to generate flashcard candidates
+    const result = await generateCandidates(sourceText, deckId, userId, context.locals.supabase);
 
-    // 4. Return response
+    // 5. Return response
     const response: GenerateFlashcardsResponseDto = {
       generationId: result.generationId,
       candidates: result.candidates,
