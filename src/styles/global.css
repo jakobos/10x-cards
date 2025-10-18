@@ -3,89 +3,268 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Material Design 3 Design Tokens */
 :root {
-  --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  /* ============================================
+     BORDER RADIUS - MD3 Scale
+     ============================================ */
+  --radius-none: 0px;
+  --radius-extra-small: 4px;
+  --radius-small: 8px;
+  --radius-medium: 12px;
+  --radius-large: 16px;
+  --radius-extra-large: 28px;
+  --radius-full: 9999px;
+  
+  /* Legacy radius for backwards compatibility */
+  --radius: var(--radius-medium);
+
+  /* ============================================
+     PRIMARY COLOR ROLE
+     Main brand color for key components
+     ============================================ */
+  --primary: oklch(0.45 0.18 264);
+  --on-primary: oklch(1 0 0);
+  --primary-container: oklch(0.90 0.08 264);
+  --on-primary-container: oklch(0.20 0.15 264);
+
+  /* ============================================
+     SECONDARY COLOR ROLE
+     Supporting color for less prominent components
+     ============================================ */
+  --secondary: oklch(0.50 0.10 240);
+  --on-secondary: oklch(1 0 0);
+  --secondary-container: oklch(0.88 0.05 240);
+  --on-secondary-container: oklch(0.22 0.08 240);
+
+  /* ============================================
+     TERTIARY COLOR ROLE
+     Contrasting accent color for highlighting
+     ============================================ */
+  --tertiary: oklch(0.58 0.20 340);
+  --on-tertiary: oklch(1 0 0);
+  --tertiary-container: oklch(0.92 0.10 340);
+  --on-tertiary-container: oklch(0.25 0.18 340);
+
+  /* ============================================
+     ERROR COLOR ROLE
+     Error states and destructive actions
+     ============================================ */
+  --error: oklch(0.55 0.22 27);
+  --on-error: oklch(1 0 0);
+  --error-container: oklch(0.93 0.10 27);
+  --on-error-container: oklch(0.30 0.18 27);
+
+  /* ============================================
+     BACKGROUND & SURFACE
+     Base colors for backgrounds and surfaces
+     ============================================ */
+  --background: oklch(0.99 0 0);
+  --on-background: oklch(0.18 0 0);
+  --surface: oklch(0.98 0 0);
+  --on-surface: oklch(0.18 0 0);
+  --surface-variant: oklch(0.92 0.004 264);
+  --on-surface-variant: oklch(0.40 0.008 264);
+
+  /* ============================================
+     SURFACE ELEVATION TONES
+     Tonal elevation for layered surfaces
+     ============================================ */
+  --surface-1: oklch(0.96 0.002 264);
+  --surface-2: oklch(0.94 0.004 264);
+  --surface-3: oklch(0.92 0.006 264);
+  --surface-4: oklch(0.90 0.008 264);
+  --surface-5: oklch(0.88 0.010 264);
+
+  /* ============================================
+     OUTLINE
+     Borders and dividers
+     ============================================ */
+  --outline: oklch(0.70 0.008 264);
+  --outline-variant: oklch(0.85 0.004 264);
+
+  /* ============================================
+     STATE LAYERS
+     Opacity values for interaction states
+     ============================================ */
+  --state-hover-opacity: 0.08;
+  --state-focus-opacity: 0.12;
+  --state-pressed-opacity: 0.12;
+  --state-dragged-opacity: 0.16;
+
+  /* ============================================
+     SCRIM
+     Overlay for modal dialogs
+     ============================================ */
+  --scrim: oklch(0 0 0);
+  --scrim-opacity: 0.32;
+
+  /* ============================================
+     SHADOWS - MD3 Elevation
+     Box shadow definitions for elevation levels
+     ============================================ */
+  --shadow-1: 0 1px 2px 0 oklch(0 0 0 / 0.3), 0 1px 3px 1px oklch(0 0 0 / 0.15);
+  --shadow-2: 0 1px 2px 0 oklch(0 0 0 / 0.3), 0 2px 6px 2px oklch(0 0 0 / 0.15);
+  --shadow-3: 0 4px 8px 3px oklch(0 0 0 / 0.15), 0 1px 3px 0 oklch(0 0 0 / 0.3);
+  --shadow-4: 0 6px 10px 4px oklch(0 0 0 / 0.15), 0 2px 3px 0 oklch(0 0 0 / 0.3);
+  --shadow-5: 0 8px 12px 6px oklch(0 0 0 / 0.15), 0 4px 4px 0 oklch(0 0 0 / 0.3);
+
+  /* ============================================
+     LEGACY COMPATIBILITY TOKENS
+     Mapped to MD3 tokens for backwards compatibility
+     ============================================ */
+  --foreground: var(--on-background);
+  --card: var(--surface-1);
+  --card-foreground: var(--on-surface);
+  --popover: var(--surface-3);
+  --popover-foreground: var(--on-surface);
+  --muted: var(--surface-variant);
+  --muted-foreground: var(--on-surface-variant);
+  --accent: var(--tertiary-container);
+  --accent-foreground: var(--on-tertiary-container);
+  --destructive: var(--error);
+  --border: var(--outline-variant);
+  --input: var(--outline);
+  --ring: var(--primary);
+  --primary-foreground: var(--on-primary);
+  --secondary-foreground: var(--on-secondary);
+
+  /* ============================================
+     CHART COLORS
+     Custom colors for data visualization
+     ============================================ */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
 }
 
+/* ============================================
+   DARK MODE - Material Design 3
+   ============================================ */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
+  /* PRIMARY COLOR ROLE */
+  --primary: oklch(0.70 0.20 264);
+  --on-primary: oklch(0.18 0.18 264);
+  --primary-container: oklch(0.28 0.18 264);
+  --on-primary-container: oklch(0.88 0.12 264);
+
+  /* SECONDARY COLOR ROLE */
+  --secondary: oklch(0.68 0.12 240);
+  --on-secondary: oklch(0.20 0.10 240);
+  --secondary-container: oklch(0.30 0.10 240);
+  --on-secondary-container: oklch(0.88 0.08 240);
+
+  /* TERTIARY COLOR ROLE */
+  --tertiary: oklch(0.75 0.22 340);
+  --on-tertiary: oklch(0.22 0.20 340);
+  --tertiary-container: oklch(0.32 0.20 340);
+  --on-tertiary-container: oklch(0.90 0.14 340);
+
+  /* ERROR COLOR ROLE */
+  --error: oklch(0.70 0.20 27);
+  --on-error: oklch(0.25 0.20 27);
+  --error-container: oklch(0.32 0.18 27);
+  --on-error-container: oklch(0.92 0.12 27);
+
+  /* BACKGROUND & SURFACE */
+  --background: oklch(0.10 0 0);
+  --on-background: oklch(0.90 0 0);
+  --surface: oklch(0.14 0 0);
+  --on-surface: oklch(0.90 0 0);
+  --surface-variant: oklch(0.24 0.004 264);
+  --on-surface-variant: oklch(0.70 0.008 264);
+
+  /* SURFACE ELEVATION TONES */
+  --surface-1: oklch(0.16 0.002 264);
+  --surface-2: oklch(0.18 0.004 264);
+  --surface-3: oklch(0.20 0.006 264);
+  --surface-4: oklch(0.22 0.008 264);
+  --surface-5: oklch(0.24 0.010 264);
+
+  /* OUTLINE */
+  --outline: oklch(0.50 0.008 264);
+  --outline-variant: oklch(0.30 0.004 264);
+
+  /* SCRIM */
+  --scrim: oklch(0 0 0);
+  --scrim-opacity: 0.48;
+
+  /* SHADOWS - Slightly more visible in dark mode */
+  --shadow-1: 0 1px 3px 1px oklch(0 0 0 / 0.45), 0 1px 2px 0 oklch(0 0 0 / 0.40);
+  --shadow-2: 0 2px 6px 2px oklch(0 0 0 / 0.45), 0 1px 2px 0 oklch(0 0 0 / 0.40);
+  --shadow-3: 0 4px 8px 3px oklch(0 0 0 / 0.45), 0 1px 3px 0 oklch(0 0 0 / 0.40);
+  --shadow-4: 0 6px 10px 4px oklch(0 0 0 / 0.45), 0 2px 3px 0 oklch(0 0 0 / 0.40);
+  --shadow-5: 0 8px 12px 6px oklch(0 0 0 / 0.45), 0 4px 4px 0 oklch(0 0 0 / 0.40);
+
+  /* CHART COLORS - Adjusted for dark mode */
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
   --chart-4: oklch(0.627 0.265 303.9);
   --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
 }
 
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  /* ============================================
+     TAILWIND CSS RADIUS UTILITIES
+     ============================================ */
+  --radius-sm: var(--radius-small);
+  --radius-md: var(--radius-medium);
+  --radius-lg: var(--radius-large);
+  --radius-xl: var(--radius-extra-large);
+
+  /* ============================================
+     TAILWIND CSS COLOR UTILITIES - MD3 Core
+     ============================================ */
+  --color-primary: var(--primary);
+  --color-on-primary: var(--on-primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+
+  --color-secondary: var(--secondary);
+  --color-on-secondary: var(--on-secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary-container: var(--on-secondary-container);
+
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+
+  --color-error: var(--error);
+  --color-on-error: var(--on-error);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+
   --color-background: var(--background);
+  --color-on-background: var(--on-background);
+  --color-surface: var(--surface);
+  --color-on-surface: var(--on-surface);
+  --color-surface-variant: var(--surface-variant);
+  --color-on-surface-variant: var(--on-surface-variant);
+
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-surface-4: var(--surface-4);
+  --color-surface-5: var(--surface-5);
+
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+
+  --color-scrim: var(--scrim);
+
+  /* ============================================
+     LEGACY COMPATIBILITY COLORS
+     ============================================ */
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
@@ -95,19 +274,15 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+
+  /* ============================================
+     CHART COLORS
+     ============================================ */
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 @layer base {
