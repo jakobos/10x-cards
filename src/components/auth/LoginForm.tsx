@@ -47,20 +47,25 @@ export default function LoginForm() {
   };
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full max-w-md mx-auto" data-testid="login-form">
       <CardHeader>
         <CardTitle>Zaloguj się</CardTitle>
         <CardDescription>Wprowadź swoje dane, aby uzyskać dostęp do konta</CardDescription>
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
-          {error && <div className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-md">{error}</div>}
+          {error && (
+            <div data-testid="login-error" className="text-sm text-destructive bg-destructive/10 px-3 py-2 rounded-md">
+              {error}
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
+              data-testid="email-input"
               placeholder="twoj@email.pl"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -74,6 +79,7 @@ export default function LoginForm() {
             <Input
               id="password"
               type="password"
+              data-testid="password-input"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -90,7 +96,7 @@ export default function LoginForm() {
         </CardContent>
 
         <CardFooter className="flex flex-col gap-4">
-          <Button type="submit" className="w-full" disabled={loading}>
+          <Button type="submit" data-testid="login-submit-button" className="w-full" disabled={loading}>
             {loading ? "Logowanie..." : "Zaloguj się"}
           </Button>
 

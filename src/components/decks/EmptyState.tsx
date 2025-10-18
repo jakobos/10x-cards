@@ -11,7 +11,7 @@ export function EmptyState({ onCreateClick }: EmptyStateProps) {
         <h2 className="text-2xl font-semibold">Nie masz jeszcze żadnych talii</h2>
         <p className="text-muted-foreground">Stwórz swoją pierwszą talię, aby rozpocząć naukę</p>
       </div>
-      <Button onClick={onCreateClick} size="lg">
+      <Button onClick={onCreateClick} size="lg" data-testid="create-deck-button-empty">
         Stwórz nową talię
       </Button>
     </div>

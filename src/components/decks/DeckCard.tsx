@@ -19,10 +19,12 @@ export function DeckCard({ deck, onEdit, onDelete }: DeckCardProps) {
   const isLearningDisabled = deck.flashcardCount === 0;
 
   return (
-    <Card className="hover:shadow-lg transition-shadow">
+    <Card className="hover:shadow-lg transition-shadow" data-testid="deck-card" data-deck-id={deck.id}>
       <CardHeader>
         <a href={`/app/decks/${deck.id}`} className="block">
-          <CardTitle className="cursor-pointer hover:text-primary transition-colors">{deck.name}</CardTitle>
+          <CardTitle className="cursor-pointer hover:text-primary transition-colors" data-testid="deck-card-title">
+            {deck.name}
+          </CardTitle>
         </a>
         <CardDescription>
           {deck.flashcardCount} {deck.flashcardCount === 1 ? "fiszka" : "fiszek"}

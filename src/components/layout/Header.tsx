@@ -37,10 +37,17 @@ export default function Header({ userEmail }: HeaderProps) {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header
+      data-testid="app-header"
+      className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+    >
       <div className="container flex h-16 max-w-screen-2xl items-center justify-between px-4">
         <div className="flex items-center gap-6">
-          <a href="/app/decks" className="text-lg font-semibold transition-colors hover:text-foreground/80">
+          <a
+            href="/app/decks"
+            data-testid="decks-link"
+            className="text-lg font-semibold transition-colors hover:text-foreground/80"
+          >
             Moje Talie
           </a>
         </div>
@@ -48,7 +55,7 @@ export default function Header({ userEmail }: HeaderProps) {
         <div className="flex items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
+              <Button variant="ghost" size="icon" data-testid="user-menu-trigger" className="rounded-full">
                 <UserIcon className="h-5 w-5" />
                 <span className="sr-only">Menu użytkownika</span>
               </Button>
@@ -56,7 +63,7 @@ export default function Header({ userEmail }: HeaderProps) {
             <DropdownMenuContent align="end" className="w-56">
               {userEmail && (
                 <>
-                  <DropdownMenuLabel>
+                  <DropdownMenuLabel data-testid="user-email-label">
                     <div className="flex flex-col space-y-1">
                       <p className="text-sm font-medium leading-none">Moje konto</p>
                       <p className="text-xs leading-none text-muted-foreground truncate">{userEmail}</p>
@@ -66,13 +73,22 @@ export default function Header({ userEmail }: HeaderProps) {
                 </>
               )}
               <DropdownMenuItem asChild>
-                <a href="/app/account-settings" className="flex items-center cursor-pointer">
+                <a
+                  href="/app/account-settings"
+                  data-testid="account-settings-link"
+                  className="flex items-center cursor-pointer"
+                >
                   <SettingsIcon className="mr-2 h-4 w-4" />
                   <span>Ustawienia konta</span>
                 </a>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} disabled={isLoggingOut} variant="destructive">
+              <DropdownMenuItem
+                onClick={handleLogout}
+                data-testid="logout-button"
+                disabled={isLoggingOut}
+                variant="destructive"
+              >
                 <LogOutIcon className="mr-2 h-4 w-4" />
                 <span>{isLoggingOut ? "Wylogowywanie..." : "Wyloguj"}</span>
               </DropdownMenuItem>

@@ -10,12 +10,15 @@ export default function PublicHeader() {
         <nav className="flex items-center gap-4">
           <a
             href="/login"
+            data-testid="login-link"
             className="text-sm font-medium transition-colors hover:text-foreground/80 text-foreground/60"
           >
             Zaloguj się
           </a>
           <Button asChild size="sm">
-            <a href="/register">Zarejestruj się</a>
+            <a href="/register" data-testid="register-link">
+              Zarejestruj się
+            </a>
           </Button>
         </nav>
       </div>

@@ -62,7 +62,7 @@ export function CreateEditDeckDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent>
+      <DialogContent data-testid={isEditMode ? "edit-deck-dialog" : "create-deck-dialog"}>
         <DialogHeader>
           <DialogTitle>{isEditMode ? "Edytuj nazwę talii" : "Stwórz nową talię"}</DialogTitle>
           <DialogDescription>
@@ -82,15 +82,26 @@ export function CreateEditDeckDialog({
                 }}
                 placeholder="np. Angielski - podstawy"
                 disabled={isSubmitting}
+                data-testid="deck-name-input"
               />
               {error && <p className="text-sm text-destructive">{error}</p>}
             </div>
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={handleClose} disabled={isSubmitting}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClose}
+              disabled={isSubmitting}
+              data-testid="cancel-deck-dialog-button"
+            >
               Anuluj
             </Button>
-            <Button type="submit" disabled={isSubmitting || !name.trim()}>
+            <Button
+              type="submit"
+              disabled={isSubmitting || !name.trim()}
+              data-testid={isEditMode ? "save-deck-button" : "create-deck-submit-button"}
+            >
               {isSubmitting ? "Zapisywanie..." : isEditMode ? "Zapisz" : "Utwórz"}
             </Button>
           </DialogFooter>

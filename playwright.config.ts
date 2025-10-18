@@ -1,11 +1,12 @@
 import { defineConfig, devices } from "@playwright/test";
+import dotenv from "dotenv";
+import path from "path";
 
 /**
  * Read environment variables from file.
  * https://github.com/motdotla/dotenv
  */
-// import dotenv from 'dotenv';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -41,22 +42,50 @@ export default defineConfig({
 
     /* Video on failure */
     video: "retain-on-failure",
+
+    /* Navigation timeout */
+    navigationTimeout: 30000,
+
+    /* Action timeout */
+    actionTimeout: 15000,
   },
 
   /* Configure projects for major browsers */
   projects: [
+    // Setup project - runs once to authenticate and save state
+    {
+      name: "setup",
+      testMatch: /.*\.setup\.ts/,
+    },
+
+    // Chromium authenticated - for tests requiring logged in user
     {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        // Use saved authentication state from setup
+        storageState: "tests/e2e/fixtures/.auth/user.json",
+      },
+      dependencies: ["setup"],
+      // Run all tests except those that don't need auth
+      testIgnore: ["**/teardown.ts"],
+    },
+
+    // Teardown project - runs once after all tests to clean up database
+    {
+      name: "teardown",
+      testMatch: /.*teardown\.ts/,
+      dependencies: ["chromium"],
     },
   ],
 
   /* Run your local dev server before starting the tests */
-  /* Uncomment this to automatically start the server before tests */
-  // webServer: {
-  //   command: 'npm run dev',
-  //   url: 'http://localhost:4321',
-  //   reuseExistingServer: !process.env.CI,
-  //   timeout: 120000,
-  // },
+  webServer: {
+    command: "npm run dev:e2e",
+    url: "http://localhost:4321",
+    reuseExistingServer: !process.env.CI,
+    timeout: 120000,
+    stdout: "pipe",
+    stderr: "pipe",
+  },
 });

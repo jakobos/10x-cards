@@ -91,7 +91,9 @@ export default function DecksView({ initialData, fetchError = false }: DecksView
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <h1 className="text-3xl font-bold">Moje Talie</h1>
-        <Button onClick={() => setIsCreateDialogOpen(true)}>Stwórz nową talię</Button>
+        <Button onClick={() => setIsCreateDialogOpen(true)} data-testid="create-deck-button-header">
+          Stwórz nową talię
+        </Button>
       </div>
 
       {/* Content */}
