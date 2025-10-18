@@ -10,7 +10,7 @@ interface RateLimitConfig {
 
 type RateLimitStore = Record<string, number[]>;
 
-class RateLimiter {
+export class RateLimiter {
   private store: RateLimitStore = {};
   private config: RateLimitConfig;
 

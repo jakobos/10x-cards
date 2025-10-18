@@ -7,7 +7,7 @@ import type {
   UpdateDeckCommand,
 } from "@/types";
 
-interface DeckDetailsViewState {
+export interface DeckDetailsViewState {
   deck: DeckDetailsDto;
   isLoading: boolean;
   error: string | null;
@@ -21,7 +21,7 @@ interface DeckDetailsViewState {
   };
 }
 
-type Action =
+export type Action =
   | { type: "SET_ERROR"; payload: string | null }
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "START_EDIT_NAME" }
@@ -43,7 +43,7 @@ type Action =
   | { type: "CLOSE_DELETE_DECK_DIALOG" }
   | { type: "START_DELETE_DECK" };
 
-function reducer(state: DeckDetailsViewState, action: Action): DeckDetailsViewState {
+export function reducer(state: DeckDetailsViewState, action: Action): DeckDetailsViewState {
   switch (action.type) {
     case "SET_ERROR":
       return { ...state, error: action.payload };
@@ -215,7 +215,7 @@ function reducer(state: DeckDetailsViewState, action: Action): DeckDetailsViewSt
   }
 }
 
-function createInitialState(initialData: DeckDetailsDto): DeckDetailsViewState {
+export function createInitialState(initialData: DeckDetailsDto): DeckDetailsViewState {
   return {
     deck: initialData,
     isLoading: false,
