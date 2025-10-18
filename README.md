@@ -29,6 +29,7 @@ The project is built with a modern, scalable, and efficient technology stack:
 | **Frontend**  | [Astro](https://astro.build/), [React](https://react.dev/), [TypeScript](https://www.typescriptlang.org/), [Tailwind CSS](https://tailwindcss.com/), [Shadcn/ui](https://ui.shadcn.com/) |
 | **Backend**   | [Supabase](https://supabase.com/) (PostgreSQL, Authentication, BaaS SDK)                                    |
 | **AI**        | [OpenRouter.ai](https://openrouter.ai/) for access to various large language models                          |
+| **Testing**   | [Vitest](https://vitest.dev/) (unit & integration tests), [React Testing Library](https://testing-library.com/react), [MSW](https://mswjs.io/) (HTTP mocking), [Playwright](https://playwright.dev/) (E2E tests), [Axe](https://www.deque.com/axe/) (accessibility testing) |
 | **DevOps**    | [GitHub Actions](https://github.com/features/actions) for CI/CD, [DigitalOcean](https://www.digitalocean.com/) with [Docker](https://www.docker.com/) for hosting      |
 
 ## Getting Started Locally
@@ -86,6 +87,10 @@ The `package.json` file includes several scripts for development and maintenance
 | `lint`       | Lints the codebase for errors and style issues.  |
 | `lint:fix`   | Automatically fixes linting issues.            |
 | `format`     | Formats the code using Prettier.               |
+| `test`       | Runs unit and integration tests in watch mode.  |
+| `test:run`   | Runs unit and integration tests once.          |
+| `test:coverage` | Runs tests and generates coverage report.    |
+| `test:e2e`   | Runs end-to-end tests with Playwright.         |
 
 
 
