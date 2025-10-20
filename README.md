@@ -1,4 +1,4 @@
-# 10x Cards - AI Flashcard Generator (test)
+# 10x Cards - AI Flashcard Generator
 
 [![Project Status: In Development](https://img.shields.io/badge/status-in_development-yellowgreen.svg)](https://github.com/jakobos/10x-cards)
 
