@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import type { DeckDetailsDto, FlashcardSummaryDto } from "@/types";
-import { reducer, createInitialState, type DeckDetailsViewState, type Action } from "@/hooks/useDeckDetails";
+import { reducer, createInitialState } from "@/hooks/useDeckDetails";
 
 /**
  * Test suite for useDeckDetails hook

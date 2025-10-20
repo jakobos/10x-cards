@@ -25,9 +25,8 @@ export default function UpdatePasswordForm() {
         // Placeholder - check for hash params
         const hash = window.location.hash;
         setIsValidToken(hash.includes("access_token") || hash.includes("type=recovery"));
-      } catch (err) {
+      } catch {
         setIsValidToken(false);
-        console.error("Token validation error:", err);
       }
     };
 
@@ -61,7 +60,6 @@ export default function UpdatePasswordForm() {
       // const { error } = await supabase.auth.updateUser({ password });
       // if (error) throw error;
 
-      console.log("Password update attempt");
       // Placeholder for demonstration
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
@@ -71,9 +69,8 @@ export default function UpdatePasswordForm() {
       setTimeout(() => {
         window.location.href = "/login?message=password-updated";
       }, 2000);
-    } catch (err) {
+    } catch {
       setError("Wystąpił błąd podczas zmiany hasła. Spróbuj ponownie.");
-      console.error("Password update error:", err);
     } finally {
       setLoading(false);
     }

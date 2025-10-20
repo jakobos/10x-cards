@@ -78,7 +78,7 @@ export function ErrorDisplay({ error, onRetry }: ErrorDisplayProps) {
       <div className="rounded-full bg-destructive/10 p-4">
         <AlertCircle className="h-12 w-12 text-destructive" aria-hidden="true" />
       </div>
-      
+
       <div className="max-w-md space-y-2 text-center">
         <h3 className="text-xl font-semibold">{errorDetails.title}</h3>
         <p className="text-sm text-muted-foreground">{errorDetails.description}</p>
@@ -93,4 +93,3 @@ export function ErrorDisplay({ error, onRetry }: ErrorDisplayProps) {
     </div>
   );
 }
-

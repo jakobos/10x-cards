@@ -40,7 +40,6 @@ export default function LoginForm() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Wystąpił nieoczekiwany błąd";
       setError(errorMessage);
-      console.error("Login error:", err);
     } finally {
       setLoading(false);
     }

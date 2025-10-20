@@ -95,8 +95,6 @@ export const POST: APIRoute = async (context) => {
 
     return new Response(JSON.stringify(response), { status: 200, headers: { "Content-Type": "application/json" } });
   } catch (error) {
-    console.error("Error generating flashcards:", error);
-
     // Handle custom errors from OpenRouter service
     if (error instanceof AuthenticationError) {
       return new Response(

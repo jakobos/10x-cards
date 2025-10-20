@@ -1,5 +1,3 @@
-import { http, HttpResponse } from "msw";
-
 /**
  * MSW request handlers for mocking API calls
  * Add your API mock handlers here
