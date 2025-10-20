@@ -30,8 +30,7 @@ export default function Header({ userEmail }: HeaderProps) {
       }
 
       window.location.href = "/";
-    } catch (error) {
-      console.error("Logout error:", error);
+    } catch {
       setIsLoggingOut(false);
     }
   };

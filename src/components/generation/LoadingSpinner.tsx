@@ -19,4 +19,3 @@ export function LoadingSpinner({ message = "Generowanie fiszek..." }: LoadingSpi
     </div>
   );
 }
-

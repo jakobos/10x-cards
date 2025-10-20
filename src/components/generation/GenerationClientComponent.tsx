@@ -94,4 +94,3 @@ export function GenerationClientComponent({ deckId }: GenerationClientComponentP
     </div>
   );
 }
-

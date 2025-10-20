@@ -21,8 +21,6 @@ export const DELETE: APIRoute = async ({ locals }) => {
     const { error } = await supabase.rpc("delete_user");
 
     if (error) {
-      console.error("Account deletion error:", error);
-
       // Fallback: use admin API method if available
       // For now, we'll use the auth.admin.deleteUser method
       // This requires proper setup in Supabase
@@ -54,8 +52,7 @@ export const DELETE: APIRoute = async ({ locals }) => {
         },
       }
     );
-  } catch (error) {
-    console.error("Delete account error:", error);
+  } catch {
     return new Response(JSON.stringify({ error: "Wystąpił nieoczekiwany błąd" }), {
       status: 500,
       headers: {

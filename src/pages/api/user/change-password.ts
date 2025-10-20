@@ -73,7 +73,6 @@ export const POST: APIRoute = async ({ request, locals }) => {
     });
 
     if (updateError) {
-      console.error("Password update error:", updateError);
       return new Response(JSON.stringify({ error: "Nie udało się zmienić hasła" }), {
         status: 400,
         headers: {
@@ -88,8 +87,7 @@ export const POST: APIRoute = async ({ request, locals }) => {
         "Content-Type": "application/json",
       },
     });
-  } catch (error) {
-    console.error("Change password error:", error);
+  } catch {
     return new Response(JSON.stringify({ error: "Wystąpił nieoczekiwany błąd" }), {
       status: 500,
       headers: {

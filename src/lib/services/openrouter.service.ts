@@ -107,17 +107,9 @@ export class OpenRouterService {
    * ```
    */
   public async generateJson<T>(params: GenerationParameters): Promise<T> {
-    try {
-      const payload = this.buildRequestPayload(params);
-      const response = await this.sendRequest(payload);
-      return this.parseResponse<T>(response);
-    } catch (error) {
-      // Log the error for debugging purposes
-      console.error("Error in OpenRouterService.generateJson:", error);
-
-      // Re-throw the original custom error
-      throw error;
-    }
+    const payload = this.buildRequestPayload(params);
+    const response = await this.sendRequest(payload);
+    return this.parseResponse<T>(response);
   }
 
   /**
@@ -257,17 +249,20 @@ export class OpenRouterService {
    * @throws {ParsingError} If response structure is invalid or content is not valid JSON
    * @private
    */
-  private parseResponse<T>(response: any): T {
+  private parseResponse<T>(response: unknown): T {
     // Validate response structure
-    const content = response?.choices?.[0]?.message?.content;
+    const responseObj = response as Record<string, unknown>;
+    const choices = responseObj?.choices as Record<string, unknown>[] | undefined;
+    const message = choices?.[0]?.message as Record<string, unknown> | undefined;
+    const messageContent = message?.content;
 
-    if (typeof content !== "string") {
+    if (typeof messageContent !== "string") {
       throw new ParsingError("Invalid response structure from API. Missing message content.");
     }
 
     // Try to parse the JSON content
     try {
-      return JSON.parse(content) as T;
+      return JSON.parse(messageContent) as T;
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "Unknown parsing error";
       throw new ParsingError(`Failed to parse the model's response as JSON: ${errorMessage}`);

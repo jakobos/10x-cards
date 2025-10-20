@@ -72,14 +72,18 @@ export class RateLimiter {
     const now = Date.now();
     const windowStart = now - this.config.windowMs;
 
-    for (const userId in this.store) {
+    const userIds = Object.keys(this.store);
+    for (const userId of userIds) {
       this.store[userId] = this.store[userId].filter((timestamp) => timestamp > windowStart);
 
       // Remove user entry if no recent requests
       if (this.store[userId].length === 0) {
-        delete this.store[userId];
+        this.store[userId] = undefined as unknown as number[];
       }
     }
+
+    // Clean up undefined entries
+    this.store = Object.fromEntries(Object.entries(this.store).filter(([, v]) => v !== undefined));
   }
 }
 

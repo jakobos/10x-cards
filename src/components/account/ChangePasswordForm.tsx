@@ -61,9 +61,9 @@ export default function ChangePasswordForm() {
 
       // Hide success message after 3 seconds
       setTimeout(() => setSuccess(false), 3000);
-    } catch (err: any) {
-      setError(err.message || "Wystąpił błąd podczas zmiany hasła. Spróbuj ponownie.");
-      console.error("Change password error:", err);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Wystąpił błąd podczas zmiany hasła. Spróbuj ponownie.";
+      setError(message);
     } finally {
       setLoading(false);
     }

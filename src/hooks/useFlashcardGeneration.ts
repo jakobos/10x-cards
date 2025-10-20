@@ -5,7 +5,6 @@ import type {
   GenerateFlashcardsCommand,
   GenerateFlashcardsResponseDto,
   BatchCreateFlashcardsCommand,
-  BatchCreateFlashcardsResponseDto,
 } from "@/types";
 
 interface UseFlashcardGenerationReturn {
@@ -197,7 +196,7 @@ export function useFlashcardGeneration(deckId: string): UseFlashcardGenerationRe
         throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
 
-      const data: BatchCreateFlashcardsResponseDto = await response.json();
+      await response.json();
 
       // Reset to input state on successful save
       resetToInput();

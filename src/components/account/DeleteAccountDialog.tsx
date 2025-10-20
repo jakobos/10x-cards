@@ -41,9 +41,9 @@ export default function DeleteAccountDialog() {
 
       // Redirect to home page after successful deletion
       window.location.href = "/";
-    } catch (err: any) {
-      setError(err.message || "Wystąpił błąd podczas usuwania konta. Spróbuj ponownie.");
-      console.error("Delete account error:", err);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Wystąpił błąd podczas usuwania konta. Spróbuj ponownie.";
+      setError(message);
     } finally {
       setLoading(false);
     }

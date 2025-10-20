@@ -20,8 +20,7 @@ export const POST: APIRoute = async ({ locals }) => {
     return new Response(null, {
       status: 200,
     });
-  } catch (error) {
-    console.error("Logout error:", error);
+  } catch {
     return new Response(JSON.stringify({ error: "Wystąpił nieoczekiwany błąd" }), {
       status: 500,
       headers: {

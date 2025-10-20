@@ -55,7 +55,6 @@ export default function RegisterForm() {
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : "Wystąpił nieoczekiwany błąd";
       setError(errorMessage);
-      console.error("Registration error:", err);
     } finally {
       setLoading(false);
     }

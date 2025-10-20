@@ -28,14 +28,12 @@ export default function ResetPasswordForm() {
       // });
       // if (error) throw error;
 
-      console.log("Password reset attempt for:", email);
       // Placeholder for demonstration
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       setSuccess(true);
-    } catch (err) {
+    } catch {
       setError("Wystąpił błąd. Spróbuj ponownie.");
-      console.error("Password reset error:", err);
     } finally {
       setLoading(false);
     }
