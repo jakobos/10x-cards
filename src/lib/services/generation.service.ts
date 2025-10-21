@@ -1,5 +1,3 @@
-import { createHash } from "node:crypto";
-
 import type { SupabaseClient } from "../../db/supabase.client.ts";
 import type { FlashcardCandidateDto } from "../../types.ts";
 import { openRouterService } from "./openrouter.service.ts";
@@ -31,8 +29,12 @@ export async function generateCandidates(
   const startTime = performance.now();
 
   try {
-    // 1. Calculate MD5 hash of source text
-    const sourceTextHash = createHash("md5").update(sourceText).digest("hex");
+    // 1. Calculate SHA-256 hash of source text
+    const encoder = new TextEncoder();
+    const sourceTextData = encoder.encode(sourceText);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", sourceTextData);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const sourceTextHash = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
 
     // 2. Call AI service to generate flashcard candidates
     const { candidates, model } = await callAIService(sourceText);
