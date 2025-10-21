@@ -23,6 +23,7 @@ import {
   RateLimitError,
   ServerError,
 } from "../errors.ts";
+import { OPENROUTER_API_KEY } from "astro:env/server";
 
 /**
  * Parameters for generating structured JSON responses from OpenRouter API.
@@ -65,7 +66,9 @@ export class OpenRouterService {
    */
   constructor() {
     // Guard clause: Check if API key is available
-    const apiKey = import.meta.env.OPENROUTER_API_KEY;
+
+    // ... w konstruktorze (linia 68):
+    const apiKey = OPENROUTER_API_KEY;
 
     if (!apiKey) {
       throw new Error("OPENROUTER_API_KEY environment variable is not set. " + "Please add it to your .env file.");
