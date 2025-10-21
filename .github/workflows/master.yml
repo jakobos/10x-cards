@@ -50,6 +50,9 @@ jobs:
     permissions:
       contents: read
       deployments: write
+    environment:
+      name: production
+      url: ${{steps.deployment.outputs.url}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
