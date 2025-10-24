@@ -1,11 +1,16 @@
 import { defineMiddleware } from "astro:middleware";
 
 import { createSupabaseServerInstance } from "../db/supabase.client.ts";
+import { aiRateLimiter, crudRateLimiter } from "../lib/rate-limiter.ts";
 
 const PROTECTED_PATHS = ["/app"];
 const PUBLIC_AUTH_PATHS = ["/login", "/register", "/reset-password", "/update-password"];
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  // Serverless-friendly rate limiter cleanup
+  aiRateLimiter.cleanupConditionally();
+  crudRateLimiter.cleanupConditionally();
+
   const supabase = createSupabaseServerInstance({
     cookies: context.cookies,
     headers: context.request.headers,
