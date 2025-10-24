@@ -85,6 +85,17 @@ export class RateLimiter {
     // Clean up undefined entries
     this.store = Object.fromEntries(Object.entries(this.store).filter(([, v]) => v !== undefined));
   }
+
+  /**
+   * Cleans up old entries from the store based on a given probability.
+   * This is a serverless-friendly alternative to setInterval.
+   * @param probability - The chance of cleanup running, from 0 to 1.
+   */
+  cleanupConditionally(probability = 0.01): void {
+    if (Math.random() < probability) {
+      this.cleanup();
+    }
+  }
 }
 
 // Create rate limiter for AI endpoints: 5 requests per 10 minutes
@@ -98,12 +109,3 @@ export const crudRateLimiter = new RateLimiter({
   maxRequests: 100,
   windowMs: 60 * 1000, // 1 minute
 });
-
-// Cleanup every 15 minutes
-setInterval(
-  () => {
-    aiRateLimiter.cleanup();
-    crudRateLimiter.cleanup();
-  },
-  15 * 60 * 1000
-);

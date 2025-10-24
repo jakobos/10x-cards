@@ -50,6 +50,7 @@ export const POST: APIRoute = async (context) => {
     const userId = user.id;
 
     // 2. Check rate limit (5 requests per 10 minutes)
+    aiRateLimiter.cleanupConditionally();
     if (aiRateLimiter.isRateLimited(userId)) {
       const remaining = aiRateLimiter.getRemainingRequests(userId);
       return new Response(

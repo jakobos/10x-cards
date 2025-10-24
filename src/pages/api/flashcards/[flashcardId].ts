@@ -25,7 +25,8 @@ export const PATCH: APIRoute = async ({ params, request, locals }) => {
 
     const userId = user.id;
 
-    // Check rate limit
+    // Rate limit check
+    crudRateLimiter.cleanupConditionally();
     if (crudRateLimiter.isRateLimited(userId)) {
       return new Response(
         JSON.stringify({
@@ -133,7 +134,8 @@ export const DELETE: APIRoute = async ({ params, locals }) => {
 
     const userId = user.id;
 
-    // Check rate limit
+    // Rate limit check
+    crudRateLimiter.cleanupConditionally();
     if (crudRateLimiter.isRateLimited(userId)) {
       return new Response(
         JSON.stringify({
